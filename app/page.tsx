@@ -5,7 +5,7 @@ import React, { useState, useRef } from "react";
 export default function AndulkaSite() {
   const [open, setOpen] = useState(false);
   const [categoria, setCategoria] = useState("Todos");
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef<any>(null);
 
   const handleEnter = () => {
     clearTimeout(timeoutRef.current);
