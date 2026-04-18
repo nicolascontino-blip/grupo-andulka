@@ -6,7 +6,7 @@ export default function AndulkaSite() {
   const [active, setActive] = useState<number | null>(null);
   const [index, setIndex] = useState(0);
 
-  const proyectos = {
+ const proyectos: any = {
     1: ["/proyecto1.jpg", "/proyecto1b.jpg", "/proyecto1c.jpg"],
     2: ["/proyecto2.jpg", "/proyecto2b.jpg", "/proyecto2c.jpg"],
     3: ["/proyecto3.jpg", "/proyecto3b.jpg", "/proyecto3c.jpg"],
