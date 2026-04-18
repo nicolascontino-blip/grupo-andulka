@@ -21,22 +21,27 @@ export default function AndulkaSite() {
       </header>
 
       {/* HERO */}
-      <section className="h-screen relative flex items-end text-white">
+     <section className="h-screen relative flex items-end text-white overflow-hidden">
 
-        <img 
-          src="/hero.jpg" 
-          className="absolute w-full h-full object-cover"
-        />
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="absolute w-full h-full object-cover"
+  >
+    <source src="/hero.mp4" type="video/mp4" />
+  </video>
 
-        <div className="absolute inset-0 bg-black/30"></div>
+  <div className="absolute inset-0 bg-black/40"></div>
 
-        <div className="relative p-16 max-w-3xl">
-          <h2 className="text-5xl md:text-7xl font-light leading-tight">
-            Arquitectura que transforma espacios
-          </h2>
-        </div>
+  <div className="relative p-16 max-w-3xl">
+    <h2 className="text-5xl md:text-7xl font-light leading-tight">
+      Arquitectura que transforma espacios
+    </h2>
+  </div>
 
-      </section>
+</section>
 
       {/* PROYECTOS */}
       <section id="proyectos" className="px-10 py-24">
