@@ -3,55 +3,87 @@
 import { useState } from "react";
 
 export default function AndulkaSite() {
-const [active, setActive] = useState(null);
+  const [active, setActive] = useState<number | null>(null);
 
   return (
     <div className="bg-white text-black">
 
       {/* HEADER */}
-      <header className="flex justify-between items-center px-10 py-6 border-b">
-        <h1 className="text-xl tracking-widest font-semibold">
+      <header className="fixed top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-50 text-white">
+        <h1 className="tracking-widest text-sm hover:tracking-[0.3em] transition-all duration-500 cursor-pointer">
           GRUPO ANDULKA
         </h1>
+
+        <nav className="space-x-6 text-sm">
+          <a href="#proyectos" className="hover:opacity-60 transition">Proyectos</a>
+          <a href="#contacto" className="hover:opacity-60 transition">Contacto</a>
+        </nav>
       </header>
 
       {/* HERO */}
-      <section className="h-screen flex items-center justify-center bg-gray-200">
-        <h2 className="text-4xl">Arquitectura que construye identidad</h2>
+      <section className="h-screen relative flex items-end text-white">
+
+        <img 
+          src="/hero.jpg" 
+          className="absolute w-full h-full object-cover"
+        />
+
+        <div className="absolute inset-0 bg-black/30"></div>
+
+        <div className="relative p-16 max-w-3xl">
+          <h2 className="text-5xl md:text-7xl font-light leading-tight">
+            Arquitectura que transforma espacios
+          </h2>
+        </div>
+
       </section>
 
       {/* PROYECTOS */}
-      <section className="px-10 py-24">
-        <h3 className="text-2xl mb-10">Proyectos</h3>
+      <section id="proyectos" className="px-10 py-24">
+        <h3 className="text-2xl mb-16">Proyectos</h3>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8">
+
           {[1, 2, 3].map((i) => (
-            <div key={i} onClick={() => setActive(i)} className="cursor-pointer">
+            <div 
+              key={i} 
+              onClick={() => setActive(i)} 
+              className="cursor-pointer group overflow-hidden"
+            >
               <img
                 src={`/proyecto${i}.jpg`}
-                className="h-64 w-full object-cover"
+                className="h-80 w-full object-cover transition duration-700 group-hover:scale-105"
               />
             </div>
           ))}
+
         </div>
       </section>
 
-      {/* MODAL */}
+      {/* MODAL FULLSCREEN */}
       {active && (
-        <div className="fixed inset-0 bg-black flex items-center justify-center">
+        <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+
           <button
             onClick={() => setActive(null)}
-            className="absolute top-6 right-6 text-white text-2xl"
+            className="absolute top-6 right-8 text-white text-3xl"
           >
             ✕
           </button>
 
           <img
             src={`/proyecto${active}.jpg`}
-            className="max-h-full max-w-full"
+            className="max-h-[90vh] max-w-[90vw] object-contain"
           />
+
         </div>
       )}
+
+      {/* CONTACTO */}
+      <section id="contacto" className="px-10 py-32 bg-black text-white">
+        <h3 className="text-2xl mb-6">Contacto</h3>
+        <p className="opacity-70">info@grupoandulka.com</p>
+      </section>
 
     </div>
   );
