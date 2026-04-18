@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export default function AndulkaSite() {
-  const [active, setActive] = useState<number | null>(null);
+const [active, setActive] = useState(null);
 
   return (
     <div className="bg-white text-black">
