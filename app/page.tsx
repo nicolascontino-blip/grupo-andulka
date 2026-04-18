@@ -50,7 +50,6 @@ export default function AndulkaSite() {
 
       {/* HERO VIDEO */}
       <section className="h-screen relative flex items-end text-white overflow-hidden">
-
         <video
           autoPlay
           loop
@@ -68,7 +67,6 @@ export default function AndulkaSite() {
             Arquitectura que transforma espacios
           </h2>
         </div>
-
       </section>
 
       {/* PROYECTOS */}
@@ -113,6 +111,19 @@ export default function AndulkaSite() {
         <h3 className="text-2xl mb-6">Contacto</h3>
         <p className="opacity-70">info@grupoandulka.com</p>
       </section>
+
+      {/* WHATSAPP FLOAT */}
+      <a
+        href="https://wa.me/5491155672356"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50"
+      >
+        <img
+          src="/WAPP.png"
+          className="w-14 h-14 object-contain hover:scale-110 transition"
+        />
+      </a>
 
     </div>
   );
