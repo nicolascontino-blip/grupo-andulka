@@ -108,7 +108,27 @@ export default function AndulkaSite() {
                 className="h-80 w-full object-cover transition duration-700 group-hover:scale-105"
               />
 
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6">
+
+  <div className="flex justify-between items-end w-full">
+
+    {/* NOMBRE */}
+    <h4 className="text-white text-lg">
+      {p.nombre}
+    </h4>
+
+    {/* BOTÓN */}
+    <span className="
+      text-white text-sm 
+      border border-white 
+      px-4 py-1 
+      transition-all duration-300
+      hover:bg-white hover:text-black
+    ">
+      VER PROYECTO
+    </span>
+
+</div>
                 <h4 className="text-white text-lg mb-2">{p.nombre}</h4>
 
                 <span className="text-white text-sm border border-white px-3 py-1 w-fit">
