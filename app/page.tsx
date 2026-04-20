@@ -33,8 +33,8 @@ export default function AndulkaSite() {
   // INTRO
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center z-50 overflow-hidden">
-        <h1 className="text-white text-2xl md:text-3xl tracking-[0.6em] opacity-0 animate-fadeIn">
+      <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
+        <h1 className="text-white text-2xl tracking-[0.6em] opacity-0 animate-fadeIn">
           GRUPO ANDULKA
         </h1>
 
@@ -43,7 +43,6 @@ export default function AndulkaSite() {
             0% { opacity: 0; letter-spacing: 0.2em; }
             100% { opacity: 1; letter-spacing: 0.6em; }
           }
-
           .animate-fadeIn {
             animation: fadeIn 1.5s ease forwards;
           }
@@ -57,14 +56,14 @@ export default function AndulkaSite() {
 
       {/* HEADER */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-50 text-white">
-        <div className="relative group cursor-pointer overflow-visible">
+        <div className="relative group cursor-pointer">
           <h1 className="tracking-widest text-sm transition-all duration-500 group-hover:tracking-[0.3em]">
             GRUPO ANDULKA
           </h1>
 
           <img
             src="/PAJARITO1.png"
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-6 opacity-0 group-hover:opacity-100 group-hover:-translate-y-6 transition-all duration-500 pointer-events-none"
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-6 opacity-0 group-hover:opacity-100 group-hover:-translate-y-6 transition-all duration-500"
           />
         </div>
 
@@ -74,7 +73,7 @@ export default function AndulkaSite() {
         </nav>
       </header>
 
-      {/* HERO VIDEO */}
+      {/* HERO */}
       <section className="h-screen relative flex items-end text-white overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute w-full h-full object-cover">
           <source src="/hero.mp4" type="video/mp4" />
@@ -83,7 +82,7 @@ export default function AndulkaSite() {
         <div className="absolute inset-0 bg-black/40"></div>
 
         <div className="relative p-16 max-w-3xl">
-          <h2 className="text-5xl md:text-7xl font-light leading-tight">
+          <h2 className="text-5xl md:text-7xl font-light">
             Arquitectura que transforma espacios
           </h2>
         </div>
@@ -101,46 +100,42 @@ export default function AndulkaSite() {
                 setActive(p.id);
                 setCurrentImg(0);
               }}
-              className="cursor-pointer group relative overflow-hidden"
+              className="cursor-pointer group relative overflow-hidden rounded-xl"
             >
+              {/* IMAGEN */}
               <img
                 src={p.imagenes[0]}
-                className="h-80 w-full object-cover transition duration-700 group-hover:scale-105"
+                className="h-80 w-full object-cover transition duration-700 group-hover:scale-105 rounded-xl"
               />
 
-             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6">
+              {/* OVERLAY CORREGIDO */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6 rounded-xl">
 
-  <div className="flex justify-between items-end w-full">
+                <div className="flex justify-between items-end w-full">
 
-    {/* NOMBRE */}
-    <h4 className="text-white text-lg">
-      {p.nombre}
-    </h4>
+                  <h4 className="text-white text-lg">
+                    {p.nombre}
+                  </h4>
 
-    {/* BOTÓN */}
-    <span className="
-      text-white text-sm 
-      border border-white 
-      px-4 py-1 
-      transition-all duration-300
-      hover:bg-white hover:text-black
-    ">
-      VER PROYECTO
-    </span>
+                  <span className="
+                    text-white text-sm 
+                    border border-white 
+                    px-4 py-1 
+                    transition-all duration-300
+                    hover:bg-white hover:text-black
+                  ">
+                    VER PROYECTO
+                  </span>
 
-</div>
-                <h4 className="text-white text-lg mb-2">{p.nombre}</h4>
+                </div>
 
-                <span className="text-white text-sm border border-white px-3 py-1 w-fit">
-                  VER PROYECTO
-                </span>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* MODAL GALERÍA */}
+      {/* MODAL */}
       {active && (
         <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
 
@@ -158,9 +153,8 @@ export default function AndulkaSite() {
             className="max-h-[80vh] max-w-[80vw] object-contain"
           />
 
-          {/* Flechas */}
+          {/* FLECHAS */}
           <div className="absolute bottom-10 flex gap-6 text-white text-2xl">
-
             <button
               onClick={() =>
                 setCurrentImg((prev) =>
@@ -184,7 +178,6 @@ export default function AndulkaSite() {
             >
               →
             </button>
-
           </div>
         </div>
       )}
@@ -196,25 +189,15 @@ export default function AndulkaSite() {
         <p className="opacity-70 mb-8">info@grupoandulka.com</p>
 
         <div className="flex gap-8">
-
-          <a 
-            href="https://instagram.com/grupoandulka/"
-            target="_blank"
-            className="flex items-center gap-2 hover:opacity-60 transition"
-          >
+          <a href="https://instagram.com/grupoandulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60 transition">
             <span>Instagram</span>
-            <img src="/instagram.png" className="w-5 h-5 object-contain mix-blend-lighten" />
+            <img src="/instagram.png" className="w-5 h-5 mix-blend-lighten" />
           </a>
 
-          <a 
-            href="https://linkedin.com/company/grupo-andulka/"
-            target="_blank"
-            className="flex items-center gap-2 hover:opacity-60 transition"
-          >
+          <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60 transition">
             <span>LinkedIn</span>
-            <img src="/linkedin.png" className="w-5 h-5 object-contain mix-blend-lighten" />
+            <img src="/linkedin.png" className="w-5 h-5 mix-blend-lighten" />
           </a>
-
         </div>
       </section>
 
@@ -222,12 +205,11 @@ export default function AndulkaSite() {
       <a
         href="https://wa.me/5491155672356"
         target="_blank"
-        rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50"
       >
         <img
           src="/WAPP.png"
-          className="w-14 h-14 object-contain hover:scale-110 transition"
+          className="w-14 h-14 hover:scale-110 transition"
         />
       </a>
 
