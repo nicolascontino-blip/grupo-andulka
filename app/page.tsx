@@ -32,7 +32,6 @@ export default function AndulkaSite() {
 
   const proyectoActivo = proyectos.find((p) => p.id === active);
 
-  // CAMBIO DE IMAGEN
   const nextImage = () => {
     if (!proyectoActivo) return;
     setCurrentImg((prev) =>
@@ -51,7 +50,7 @@ export default function AndulkaSite() {
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-        <h1 className="text-white text-4xl md:text-6xl tracking-[0.6em] animate-fadeIn">
+        <h1 className="text-white text-4xl md:text-6xl tracking-[0.6em] animate-fadeIn font-semibold">
           GRUPO ANDULKA
         </h1>
 
@@ -69,21 +68,32 @@ export default function AndulkaSite() {
   }
 
   return (
-    <div className="bg-white text-black">
+    <div className="bg-white text-black font-sans">
 
       {/* HEADER */}
-      <header className="fixed top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-50 text-white">
+      <header className="fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-10 py-4 md:py-6 z-50 text-white">
 
-        <h1 className="tracking-widest text-sm">
-          GRUPO ANDULKA
-        </h1>
+        {/* LOGO + PAJARITO */}
+        <div className="relative group cursor-pointer">
 
-        <nav className="flex gap-3">
+          <h1 className="tracking-widest text-xs md:text-sm transition-all duration-500 group-hover:tracking-[0.3em]">
+            GRUPO ANDULKA
+          </h1>
+
+          <img
+            src="/PAJARITO1.png"
+            className="absolute left-1/2 -translate-x-1/2 top-0 w-5 md:w-6 opacity-0 group-hover:opacity-100 group-hover:-translate-y-6 transition-all duration-500 pointer-events-none"
+          />
+
+        </div>
+
+        {/* NAV */}
+        <nav className="flex gap-2 md:gap-3 text-xs md:text-sm">
           {["proyectos","nosotros","contacto"].map((item) => (
             <a
               key={item}
               href={`#${item}`}
-              className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black transition"
+              className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black transition"
             >
               {item.charAt(0).toUpperCase() + item.slice(1)}
             </a>
@@ -99,27 +109,27 @@ export default function AndulkaSite() {
 
         <div className="absolute inset-0 bg-black/40"></div>
 
-        <div className="relative p-16 max-w-3xl">
-          <h2 className="text-5xl md:text-7xl font-light">
+        <div className="relative p-6 md:p-16 max-w-3xl">
+          <h2 className="text-3xl md:text-7xl font-light leading-tight">
             Arquitectura que transforma espacios
           </h2>
         </div>
       </section>
 
       {/* NOSOTROS */}
-      <section id="nosotros" className="px-10 py-32">
-        <h3 className="text-2xl mb-6">Nosotros</h3>
-        <p className="max-w-2xl text-gray-600">
+      <section id="nosotros" className="px-6 md:px-10 py-20 md:py-32">
+        <h3 className="text-xl md:text-2xl mb-6">Nosotros</h3>
+        <p className="max-w-2xl text-gray-600 text-sm md:text-base">
           Grupo Andulka desarrolla proyectos de arquitectura corporativa con foco en identidad,
           funcionalidad y diseño contemporáneo.
         </p>
       </section>
 
       {/* PROYECTOS */}
-      <section id="proyectos" className="px-10 py-24">
-        <h3 className="text-2xl mb-16">Proyectos</h3>
+      <section id="proyectos" className="px-6 md:px-10 py-20 md:py-24">
+        <h3 className="text-xl md:text-2xl mb-12 md:mb-16">Proyectos</h3>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {proyectos.map((p) => (
             <div
               key={p.id}
@@ -131,14 +141,14 @@ export default function AndulkaSite() {
             >
               <img
                 src={p.imagenes[0]}
-                className="h-80 w-full object-cover group-hover:scale-105 transition rounded-2xl"
+                className="h-64 md:h-80 w-full object-cover group-hover:scale-105 transition rounded-2xl"
               />
 
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-end p-6 rounded-2xl">
-                <div className="flex justify-between w-full items-end">
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-end p-4 md:p-6 rounded-2xl">
+                <div className="flex justify-between w-full items-end text-sm md:text-base">
                   <h4 className="text-white">{p.nombre}</h4>
 
-                  <span className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-black transition text-white text-sm">
+                  <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-black transition text-white text-xs md:text-sm">
                     VER PROYECTO
                   </span>
                 </div>
@@ -148,57 +158,26 @@ export default function AndulkaSite() {
         </div>
       </section>
 
-      {/* MODAL NUEVO */}
+      {/* MODAL */}
       {active && proyectoActivo && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
 
-          {/* CERRAR */}
           <button
             onClick={() => setActive(null)}
-            className="absolute top-6 right-8 text-white text-3xl z-50"
+            className="absolute top-6 right-6 md:right-8 text-white text-2xl md:text-3xl z-50"
           >
             ✕
           </button>
 
-          {/* CLICK IZQUIERDA */}
-          <div
-            className="absolute left-0 top-0 w-1/2 h-full cursor-pointer"
-            onClick={prevImage}
-          />
+          <div className="absolute left-0 w-1/2 h-full" onClick={prevImage}/>
+          <div className="absolute right-0 w-1/2 h-full" onClick={nextImage}/>
 
-          {/* CLICK DERECHA */}
-          <div
-            className="absolute right-0 top-0 w-1/2 h-full cursor-pointer"
-            onClick={nextImage}
-          />
-
-          {/* IMAGEN CON ANIMACIÓN */}
           <img
             key={currentImg}
             src={proyectoActivo.imagenes[currentImg]}
-            className="max-h-[80vh] max-w-[80vw] object-contain rounded-xl animate-fadeImage"
+            className="max-h-[70vh] md:max-h-[80vh] max-w-[90vw] md:max-w-[80vw] object-contain rounded-xl animate-fadeImage"
           />
 
-          {/* BOTONES VISUALES */}
-          <div className="absolute bottom-10 flex gap-6">
-
-            <button
-              onClick={prevImage}
-              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
-            >
-              ←
-            </button>
-
-            <button
-              onClick={nextImage}
-              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
-            >
-              →
-            </button>
-
-          </div>
-
-          {/* ANIMACIÓN */}
           <style jsx>{`
             @keyframes fadeImage {
               0% { opacity: 0; transform: scale(0.97); }
@@ -208,25 +187,26 @@ export default function AndulkaSite() {
               animation: fadeImage 0.4s ease;
             }
           `}</style>
-
         </div>
       )}
 
       {/* CONTACTO */}
-      <section id="contacto" className="px-10 py-32 bg-black text-white">
-        <h3 className="text-2xl mb-6">Contacto</h3>
+      <section id="contacto" className="px-6 md:px-10 py-24 md:py-32 bg-black text-white">
+        <h3 className="text-xl md:text-2xl mb-6">Contacto</h3>
 
-        <p className="opacity-70 mb-8">info@grupoandulka.com</p>
+        <p className="opacity-70 mb-8 text-sm md:text-base">
+          info@grupoandulka.com
+        </p>
 
-        <div className="flex gap-8">
+        <div className="flex gap-6 md:gap-8 text-sm">
           <a href="https://instagram.com/grupoandulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60">
             <span>Instagram</span>
-            <img src="/instagram.png" className="w-5 h-5 mix-blend-lighten" />
+            <img src="/instagram.png" className="w-4 md:w-5 mix-blend-lighten" />
           </a>
 
           <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60">
             <span>LinkedIn</span>
-            <img src="/linkedin.png" className="w-5 h-5 mix-blend-lighten" />
+            <img src="/linkedin.png" className="w-4 md:w-5 mix-blend-lighten" />
           </a>
         </div>
       </section>
@@ -235,11 +215,11 @@ export default function AndulkaSite() {
       <a
         href="https://wa.me/5491155672356"
         target="_blank"
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-4 md:bottom-6 right-4 md:right-6 z-50"
       >
         <img
           src="/WAPP.png"
-          className="w-14 h-14 hover:scale-110 transition"
+          className="w-12 md:w-14 hover:scale-110 transition"
         />
       </a>
 

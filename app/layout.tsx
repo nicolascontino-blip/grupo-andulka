@@ -31,3 +31,8 @@ export default function RootLayout({
     </html>
   );
 }
+import { Open_Sans } from "next/font/google";
+
+const openSans = Open_Sans({ subsets: ["latin"] });
+
+<body className={openSans.className}></body>
