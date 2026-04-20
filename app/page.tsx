@@ -7,31 +7,16 @@ export default function AndulkaSite() {
   const [currentImg, setCurrentImg] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const [startX, setStartX] = useState<number | null>(null);
-  const [dragX, setDragX] = useState(0);
-
   const proyectos = [
     {
       id: 1,
       nombre: "VALO",
-      imagenes: [
-        "/valo1.jpg",
-        "/valo2.jpg",
-        "/valo3.jpg",
-        "/valo4.jpg",
-        "/valo5.jpg",
-      ],
+      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"],
     },
     {
       id: 2,
       nombre: "CEBALLOS & CEBALLOS",
-      imagenes: [
-        "/ceballos1.jpg",
-        "/ceballos2.jpg",
-        "/ceballos3.jpg",
-        "/ceballos4.jpg",
-        "/ceballos5.jpg",
-      ],
+      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg","/ceballos4.jpg","/ceballos5.jpg"],
     },
     {
       id: 3,
@@ -47,39 +32,38 @@ export default function AndulkaSite() {
 
   const proyectoActivo = proyectos.find((p) => p.id === active);
 
-  // SWIPE MEJORADO
-  const handleStart = (x: number) => setStartX(x);
-
-  const handleMove = (x: number) => {
-    if (startX === null) return;
-    setDragX(x - startX);
+  // CAMBIO DE IMAGEN
+  const nextImage = () => {
+    if (!proyectoActivo) return;
+    setCurrentImg((prev) =>
+      prev === proyectoActivo.imagenes.length - 1 ? 0 : prev + 1
+    );
   };
 
-  const handleEnd = () => {
-    if (startX === null || !proyectoActivo) return;
-
-    if (dragX > 80) {
-      setCurrentImg((prev) =>
-        prev === 0 ? proyectoActivo.imagenes.length - 1 : prev - 1
-      );
-    }
-
-    if (dragX < -80) {
-      setCurrentImg((prev) =>
-        prev === proyectoActivo.imagenes.length - 1 ? 0 : prev + 1
-      );
-    }
-
-    setStartX(null);
-    setDragX(0);
+  const prevImage = () => {
+    if (!proyectoActivo) return;
+    setCurrentImg((prev) =>
+      prev === 0 ? proyectoActivo.imagenes.length - 1 : prev - 1
+    );
   };
 
+  // INTRO
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-        <h1 className="text-white text-2xl tracking-[0.6em] animate-fadeIn">
+        <h1 className="text-white text-4xl md:text-6xl tracking-[0.6em] animate-fadeIn">
           GRUPO ANDULKA
         </h1>
+
+        <style jsx>{`
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+          }
+          .animate-fadeIn {
+            animation: fadeIn 1.5s ease forwards;
+          }
+        `}</style>
       </div>
     );
   }
@@ -90,16 +74,9 @@ export default function AndulkaSite() {
       {/* HEADER */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-50 text-white">
 
-        <div className="relative group cursor-pointer">
-          <h1 className="tracking-widest text-sm transition-all duration-500 group-hover:tracking-[0.3em]">
-            GRUPO ANDULKA
-          </h1>
-
-          <img
-            src="/PAJARITO1.png"
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-6 opacity-0 group-hover:opacity-100 group-hover:-translate-y-6 transition-all duration-500"
-          />
-        </div>
+        <h1 className="tracking-widest text-sm">
+          GRUPO ANDULKA
+        </h1>
 
         <nav className="flex gap-3">
           {["proyectos","nosotros","contacto"].map((item) => (
@@ -153,7 +130,7 @@ export default function AndulkaSite() {
               className="cursor-pointer group relative overflow-hidden rounded-2xl"
             >
               <img
-                src={p.imagenes[0] + "?v=" + Date.now()}  // 👈 FIX CACHE
+                src={p.imagenes[0]}
                 className="h-80 w-full object-cover group-hover:scale-105 transition rounded-2xl"
               />
 
@@ -171,21 +148,11 @@ export default function AndulkaSite() {
         </div>
       </section>
 
-      {/* MODAL */}
+      {/* MODAL NUEVO */}
       {active && proyectoActivo && (
-        <div
-          className={`fixed inset-0 bg-black/95 z-50 flex items-center justify-center overflow-hidden ${
-            startX !== null ? "cursor-grabbing" : "cursor-grab"
-          }`}
-          onMouseDown={(e) => handleStart(e.clientX)}
-          onMouseMove={(e) => handleMove(e.clientX)}
-          onMouseUp={handleEnd}
-          onMouseLeave={handleEnd}
-          onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-          onTouchMove={(e) => handleMove(e.touches[0].clientX)}
-          onTouchEnd={handleEnd}
-        >
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
 
+          {/* CERRAR */}
           <button
             onClick={() => setActive(null)}
             className="absolute top-6 right-8 text-white text-3xl z-50"
@@ -193,20 +160,55 @@ export default function AndulkaSite() {
             ✕
           </button>
 
+          {/* CLICK IZQUIERDA */}
           <div
-            className={`flex ${startX === null ? "transition-transform duration-300 ease-out" : ""}`}
-            style={{
-              transform: `translateX(calc(-${currentImg * 100}% + ${dragX}px))`,
-            }}
-          >
-            {proyectoActivo.imagenes.map((img, i) => (
-              <img
-                key={i}
-                src={img + "?v=" + Date.now()} // 👈 FIX CACHE TAMBIÉN
-                className="w-screen max-h-[80vh] object-contain flex-shrink-0 pointer-events-none"
-              />
-            ))}
+            className="absolute left-0 top-0 w-1/2 h-full cursor-pointer"
+            onClick={prevImage}
+          />
+
+          {/* CLICK DERECHA */}
+          <div
+            className="absolute right-0 top-0 w-1/2 h-full cursor-pointer"
+            onClick={nextImage}
+          />
+
+          {/* IMAGEN CON ANIMACIÓN */}
+          <img
+            key={currentImg}
+            src={proyectoActivo.imagenes[currentImg]}
+            className="max-h-[80vh] max-w-[80vw] object-contain rounded-xl animate-fadeImage"
+          />
+
+          {/* BOTONES VISUALES */}
+          <div className="absolute bottom-10 flex gap-6">
+
+            <button
+              onClick={prevImage}
+              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
+            >
+              ←
+            </button>
+
+            <button
+              onClick={nextImage}
+              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
+            >
+              →
+            </button>
+
           </div>
+
+          {/* ANIMACIÓN */}
+          <style jsx>{`
+            @keyframes fadeImage {
+              0% { opacity: 0; transform: scale(0.97); }
+              100% { opacity: 1; transform: scale(1); }
+            }
+            .animate-fadeImage {
+              animation: fadeImage 0.4s ease;
+            }
+          `}</style>
+
         </div>
       )}
 
@@ -217,7 +219,6 @@ export default function AndulkaSite() {
         <p className="opacity-70 mb-8">info@grupoandulka.com</p>
 
         <div className="flex gap-8">
-
           <a href="https://instagram.com/grupoandulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60">
             <span>Instagram</span>
             <img src="/instagram.png" className="w-5 h-5 mix-blend-lighten" />
@@ -227,7 +228,6 @@ export default function AndulkaSite() {
             <span>LinkedIn</span>
             <img src="/linkedin.png" className="w-5 h-5 mix-blend-lighten" />
           </a>
-
         </div>
       </section>
 
