@@ -262,17 +262,7 @@ export default function AndulkaSite() {
       </a>
 
       {/* ANIMACIÓN */}
-      <style jsx global>{`
-        .fade-section {
-          opacity: 0;
-          transform: translateY(40px);
-          transition: all 0.9s ease;
-        }
-        .fade-section.show {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      `}</style>
+    
 
     </div>
   );
