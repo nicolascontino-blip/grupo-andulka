@@ -6,17 +6,30 @@ export default function AndulkaSite() {
   const [active, setActive] = useState<number | null>(null);
   const [currentImg, setCurrentImg] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [startX, setStartX] = useState<number | null>(null);
 
   const proyectos = [
     {
       id: 1,
       nombre: "VALO",
-      imagenes: ["/valo1.jpg", "/valo2.jpg", "/valo3.jpg"],
+      imagenes: [
+        "/valo1.jpg",
+        "/valo2.jpg",
+        "/valo3.jpg",
+        "/valo4.jpg",
+        "/valo5.jpg",
+      ],
     },
     {
       id: 2,
       nombre: "CEBALLOS & CEBALLOS",
-      imagenes: ["/ceballos1.jpg", "/ceballos2.jpg", "/ceballos3.jpg"],
+      imagenes: [
+        "/ceballos1.jpg",
+        "/ceballos2.jpg",
+        "/ceballos3.jpg",
+        "/ceballos4.jpg",
+        "/ceballos5.jpg",
+      ],
     },
     {
       id: 3,
@@ -26,9 +39,35 @@ export default function AndulkaSite() {
   ];
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2200);
+    const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  // SWIPE
+  const handleStart = (x: number) => {
+    setStartX(x);
+  };
+
+  const handleEnd = (x: number) => {
+    if (startX === null || active === null) return;
+
+    const diff = x - startX;
+    const proyecto = proyectos.find((p) => p.id === active)!;
+
+    if (diff > 50) {
+      setCurrentImg((prev) =>
+        prev === 0 ? proyecto.imagenes.length - 1 : prev - 1
+      );
+    }
+
+    if (diff < -50) {
+      setCurrentImg((prev) =>
+        prev === proyecto.imagenes.length - 1 ? 0 : prev + 1
+      );
+    }
+
+    setStartX(null);
+  };
 
   // INTRO
   if (loading) {
@@ -100,17 +139,14 @@ export default function AndulkaSite() {
                 setActive(p.id);
                 setCurrentImg(0);
               }}
-              className="cursor-pointer group relative overflow-hidden rounded-xl"
+              className="cursor-pointer group relative overflow-hidden rounded-2xl"
             >
-              {/* IMAGEN */}
               <img
                 src={p.imagenes[0]}
-                className="h-80 w-full object-cover transition duration-700 group-hover:scale-105 rounded-xl"
+                className="h-80 w-full object-cover transition duration-700 group-hover:scale-105 rounded-2xl"
               />
 
-              {/* OVERLAY CORREGIDO */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6 rounded-xl">
-
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition duration-500 flex items-end p-6 rounded-2xl">
                 <div className="flex justify-between items-end w-full">
 
                   <h4 className="text-white text-lg">
@@ -118,9 +154,12 @@ export default function AndulkaSite() {
                   </h4>
 
                   <span className="
-                    text-white text-sm 
-                    border border-white 
-                    px-4 py-1 
+                    text-white text-sm
+                    px-5 py-2
+                    rounded-full
+                    border border-white/40
+                    backdrop-blur-md
+                    bg-white/10
                     transition-all duration-300
                     hover:bg-white hover:text-black
                   ">
@@ -128,7 +167,6 @@ export default function AndulkaSite() {
                   </span>
 
                 </div>
-
               </div>
             </div>
           ))}
@@ -137,7 +175,7 @@ export default function AndulkaSite() {
 
       {/* MODAL */}
       {active && (
-        <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
 
           <button
             onClick={() => setActive(null)}
@@ -150,12 +188,18 @@ export default function AndulkaSite() {
             src={
               proyectos.find((p) => p.id === active)?.imagenes[currentImg]
             }
-            className="max-h-[80vh] max-w-[80vw] object-contain"
+            className="max-h-[80vh] max-w-[80vw] object-contain rounded-xl cursor-grab"
+            onMouseDown={(e) => handleStart(e.clientX)}
+            onMouseUp={(e) => handleEnd(e.clientX)}
+            onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+            onTouchEnd={(e) => handleEnd(e.changedTouches[0].clientX)}
           />
 
-          {/* FLECHAS */}
-          <div className="absolute bottom-10 flex gap-6 text-white text-2xl">
+          {/* BOTONES */}
+          <div className="absolute bottom-10 flex gap-6">
+
             <button
+              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
               onClick={() =>
                 setCurrentImg((prev) =>
                   prev === 0
@@ -168,6 +212,7 @@ export default function AndulkaSite() {
             </button>
 
             <button
+              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
               onClick={() =>
                 setCurrentImg((prev) =>
                   prev === proyectos.find((p) => p.id === active)!.imagenes.length - 1
@@ -178,6 +223,7 @@ export default function AndulkaSite() {
             >
               →
             </button>
+
           </div>
         </div>
       )}
