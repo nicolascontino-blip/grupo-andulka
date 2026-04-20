@@ -174,59 +174,63 @@ export default function AndulkaSite() {
       </section>
 
       {/* MODAL */}
-      {active && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
+ {/* MODAL */}
+{active && (
+  <div
+    className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
+    
+    onMouseDown={(e) => handleStart(e.clientX)}
+    onMouseUp={(e) => handleEnd(e.clientX)}
+    onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+    onTouchEnd={(e) => handleEnd(e.changedTouches[0].clientX)}
+  >
 
-          <button
-            onClick={() => setActive(null)}
-            className="absolute top-6 right-8 text-white text-3xl"
-          >
-            ✕
-          </button>
+    <button
+      onClick={() => setActive(null)}
+      className="absolute top-6 right-8 text-white text-3xl z-50"
+    >
+      ✕
+    </button>
 
-          <img
-            src={
-              proyectos.find((p) => p.id === active)?.imagenes[currentImg]
-            }
-            className="max-h-[80vh] max-w-[80vw] object-contain rounded-xl cursor-grab"
-            onMouseDown={(e) => handleStart(e.clientX)}
-            onMouseUp={(e) => handleEnd(e.clientX)}
-            onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-            onTouchEnd={(e) => handleEnd(e.changedTouches[0].clientX)}
-          />
+    <img
+      src={
+        proyectos.find((p) => p.id === active)?.imagenes[currentImg]
+      }
+      className="max-h-[80vh] max-w-[80vw] object-contain rounded-xl select-none"
+    />
 
-          {/* BOTONES */}
-          <div className="absolute bottom-10 flex gap-6">
+    {/* BOTONES */}
+    <div className="absolute bottom-10 flex gap-6">
 
-            <button
-              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
-              onClick={() =>
-                setCurrentImg((prev) =>
-                  prev === 0
-                    ? proyectos.find((p) => p.id === active)!.imagenes.length - 1
-                    : prev - 1
-                )
-              }
-            >
-              ←
-            </button>
+      <button
+        className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
+        onClick={() =>
+          setCurrentImg((prev) =>
+            prev === 0
+              ? proyectos.find((p) => p.id === active)!.imagenes.length - 1
+              : prev - 1
+          )
+        }
+      >
+        ←
+      </button>
 
-            <button
-              className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
-              onClick={() =>
-                setCurrentImg((prev) =>
-                  prev === proyectos.find((p) => p.id === active)!.imagenes.length - 1
-                    ? 0
-                    : prev + 1
-                )
-              }
-            >
-              →
-            </button>
+      <button
+        className="text-white px-4 py-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white hover:text-black transition"
+        onClick={() =>
+          setCurrentImg((prev) =>
+            prev === proyectos.find((p) => p.id === active)!.imagenes.length - 1
+              ? 0
+              : prev + 1
+          )
+        }
+      >
+        →
+      </button>
 
-          </div>
-        </div>
-      )}
+    </div>
+  </div>
+)}
 
       {/* CONTACTO */}
       <section id="contacto" className="px-10 py-32 bg-black text-white">
