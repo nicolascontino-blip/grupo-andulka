@@ -35,10 +35,8 @@ export default function AndulkaSite() {
 
   const proyectoActivo = proyectos.find((p) => p.id === active);
 
-  // SWIPE REAL
-  const handleStart = (x: number) => {
-    setStartX(x);
-  };
+  // SWIPE
+  const handleStart = (x: number) => setStartX(x);
 
   const handleMove = (x: number) => {
     if (startX === null) return;
@@ -77,7 +75,7 @@ export default function AndulkaSite() {
   return (
     <div className="bg-white text-black">
 
-      {/* HEADER APPLE */}
+      {/* HEADER */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-50 text-white">
 
         <div className="relative group cursor-pointer">
@@ -107,7 +105,7 @@ export default function AndulkaSite() {
       {/* HERO */}
       <section className="h-screen relative flex items-end text-white overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute w-full h-full object-cover">
-          <source src="/hero.mp4" type="video/mp4" />
+          <source src="/hero.mp4" />
         </video>
 
         <div className="absolute inset-0 bg-black/40"></div>
@@ -123,8 +121,8 @@ export default function AndulkaSite() {
       <section id="nosotros" className="px-10 py-32">
         <h3 className="text-2xl mb-6">Nosotros</h3>
         <p className="max-w-2xl text-gray-600">
-          Grupo Andulka desarrolla proyectos de arquitectura corporativa con una mirada contemporánea,
-          combinando diseño, identidad y funcionalidad.
+          Grupo Andulka desarrolla proyectos de arquitectura corporativa con foco en identidad,
+          funcionalidad y diseño contemporáneo.
         </p>
       </section>
 
@@ -161,7 +159,7 @@ export default function AndulkaSite() {
         </div>
       </section>
 
-      {/* MODAL SWIPE REAL */}
+      {/* MODAL SWIPE */}
       {active && proyectoActivo && (
         <div
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center overflow-hidden"
@@ -181,7 +179,6 @@ export default function AndulkaSite() {
             ✕
           </button>
 
-          {/* SLIDER */}
           <div
             className="flex transition-transform duration-300 ease-out"
             style={{
@@ -196,15 +193,41 @@ export default function AndulkaSite() {
               />
             ))}
           </div>
-
         </div>
       )}
 
       {/* CONTACTO */}
       <section id="contacto" className="px-10 py-32 bg-black text-white">
         <h3 className="text-2xl mb-6">Contacto</h3>
+
         <p className="opacity-70 mb-8">info@grupoandulka.com</p>
+
+        <div className="flex gap-8">
+
+          <a href="https://instagram.com/grupoandulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60">
+            <span>Instagram</span>
+            <img src="/instagram.png" className="w-5 h-5 mix-blend-lighten" />
+          </a>
+
+          <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60">
+            <span>LinkedIn</span>
+            <img src="/linkedin.png" className="w-5 h-5 mix-blend-lighten" />
+          </a>
+
+        </div>
       </section>
+
+      {/* WHATSAPP */}
+      <a
+        href="https://wa.me/5491155672356"
+        target="_blank"
+        className="fixed bottom-6 right-6 z-50"
+      >
+        <img
+          src="/WAPP.png"
+          className="w-14 h-14 hover:scale-110 transition"
+        />
+      </a>
 
     </div>
   );
