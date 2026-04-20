@@ -1,9 +1,16 @@
 import "./globals.css";
-import { Open_Sans } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 
-const openSans = Open_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "600"],
+  weight: ["300", "400", "500"],
+  variable: "--font-inter",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-playfair",
 });
 
 export const metadata = {
@@ -18,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={openSans.className}>
+      <body className={`${inter.variable} ${playfair.variable}`}>
         {children}
       </body>
     </html>
