@@ -11,7 +11,7 @@ export default function AndulkaSite() {
     {
       id: 1,
       nombre: "VALO",
-      imagenes: ["/valo1.jpg","/valo6.jpg","/valo7.jpg","/valo4.jpg","/valo5.jpg"],
+      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"],
     },
     {
       id: 2,
@@ -46,12 +46,12 @@ export default function AndulkaSite() {
     );
   };
 
-  // 🔥 NAVEGACIÓN CON TECLADO
+  // 🔥 NAVEGACIÓN TECLADO (FIX REAL)
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (!active) return;
+      if (active === null) return;
 
-      if (e.key === "ArrowRight" || e.key === " ") {
+      if (e.key === "ArrowRight" || e.code === "Space") {
         e.preventDefault();
         nextImage();
       }
@@ -66,11 +66,14 @@ export default function AndulkaSite() {
       }
     };
 
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [active, proyectoActivo]);
+    document.addEventListener("keydown", handleKey);
 
-  // HOOK ANIMACIÓN
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [active, currentImg]);
+
+  // 🔥 HOOK ANIMACIÓN
   const useFadeIn = () => {
     const ref = useRef<any>(null);
 
