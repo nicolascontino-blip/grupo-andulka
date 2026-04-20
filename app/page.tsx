@@ -14,12 +14,24 @@ export default function AndulkaSite() {
     {
       id: 1,
       nombre: "VALO",
-      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"],
+      imagenes: [
+        "/valo1.jpg",
+        "/valo2.jpg",
+        "/valo3.jpg",
+        "/valo4.jpg",
+        "/valo5.jpg",
+      ],
     },
     {
       id: 2,
       nombre: "CEBALLOS & CEBALLOS",
-      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg","/ceballos4.jpg","/ceballos5.jpg"],
+      imagenes: [
+        "/ceballos1.jpg",
+        "/ceballos2.jpg",
+        "/ceballos3.jpg",
+        "/ceballos4.jpg",
+        "/ceballos5.jpg",
+      ],
     },
     {
       id: 3,
@@ -35,7 +47,7 @@ export default function AndulkaSite() {
 
   const proyectoActivo = proyectos.find((p) => p.id === active);
 
-  // SWIPE
+  // SWIPE MEJORADO
   const handleStart = (x: number) => setStartX(x);
 
   const handleMove = (x: number) => {
@@ -141,7 +153,7 @@ export default function AndulkaSite() {
               className="cursor-pointer group relative overflow-hidden rounded-2xl"
             >
               <img
-                src={p.imagenes[0]}
+                src={p.imagenes[0] + "?v=" + Date.now()}  // 👈 FIX CACHE
                 className="h-80 w-full object-cover group-hover:scale-105 transition rounded-2xl"
               />
 
@@ -159,10 +171,12 @@ export default function AndulkaSite() {
         </div>
       </section>
 
-      {/* MODAL SWIPE */}
+      {/* MODAL */}
       {active && proyectoActivo && (
         <div
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center overflow-hidden"
+          className={`fixed inset-0 bg-black/95 z-50 flex items-center justify-center overflow-hidden ${
+            startX !== null ? "cursor-grabbing" : "cursor-grab"
+          }`}
           onMouseDown={(e) => handleStart(e.clientX)}
           onMouseMove={(e) => handleMove(e.clientX)}
           onMouseUp={handleEnd}
@@ -180,7 +194,7 @@ export default function AndulkaSite() {
           </button>
 
           <div
-            className="flex transition-transform duration-300 ease-out"
+            className={`flex ${startX === null ? "transition-transform duration-300 ease-out" : ""}`}
             style={{
               transform: `translateX(calc(-${currentImg * 100}% + ${dragX}px))`,
             }}
@@ -188,8 +202,8 @@ export default function AndulkaSite() {
             {proyectoActivo.imagenes.map((img, i) => (
               <img
                 key={i}
-                src={img}
-                className="w-screen max-h-[80vh] object-contain flex-shrink-0"
+                src={img + "?v=" + Date.now()} // 👈 FIX CACHE TAMBIÉN
+                className="w-screen max-h-[80vh] object-contain flex-shrink-0 pointer-events-none"
               />
             ))}
           </div>
