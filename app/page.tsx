@@ -11,7 +11,7 @@ export default function AndulkaSite() {
     {
       id: 1,
       nombre: "VALO",
-      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"],
+      imagenes: ["/valo1.jpg","/valo6.jpg","/valo7.jpg","/valo4.jpg","/valo5.jpg"],
     },
     {
       id: 2,
