@@ -38,9 +38,18 @@ export default function AndulkaSite() {
 
       {/* HEADER */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-50 text-white">
-        <h1 className="tracking-widest text-sm hover:tracking-[0.3em] transition-all duration-500 cursor-pointer">
-          GRUPO ANDULKA
-        </h1>
+    <div className="relative group cursor-pointer">
+
+  <h1 className="tracking-widest text-sm transition-all duration-500 group-hover:tracking-[0.3em]">
+    GRUPO ANDULKA
+  </h1>
+
+  <img
+    src="/PAJARITO1.png"
+    className="absolute -top-6 left-1/2 -translate-x-1/2 w-6 opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500"
+  />
+
+</div>
 
         <nav className="space-x-6 text-sm">
           <a href="#proyectos" className="hover:opacity-60 transition">Proyectos</a>
@@ -107,10 +116,33 @@ export default function AndulkaSite() {
       )}
 
       {/* CONTACTO */}
-      <section id="contacto" className="px-10 py-32 bg-black text-white">
-        <h3 className="text-2xl mb-6">Contacto</h3>
-        <p className="opacity-70">info@grupoandulka.com</p>
-      </section>
+   <section id="contacto" className="px-10 py-32 bg-black text-white">
+  <h3 className="text-2xl mb-6">Contacto</h3>
+
+  <p className="opacity-70 mb-8">info@grupoandulka.com</p>
+
+  <div className="flex gap-8">
+
+    <a 
+      href="https://instagram.com/grupoandulka/"
+      target="_blank"
+      className="flex items-center gap-2 hover:opacity-60 transition"
+    >
+      <span>Instagram</span>
+      <img src="/instagram.png" className="w-5 h-5" />
+    </a>
+
+    <a 
+      href="https://linkedin.com/company/grupo-andulka/"
+      target="_blank"
+      className="flex items-center gap-2 hover:opacity-60 transition"
+    >
+      <span>LinkedIn</span>
+      <img src="/linkedin.png" className="w-5 h-5" />
+    </a>
+
+  </div>
+</section>
 
       {/* WHATSAPP FLOAT */}
       <a
