@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function AndulkaSite() {
   const [active, setActive] = useState<number | null>(null);
@@ -46,6 +46,35 @@ export default function AndulkaSite() {
     );
   };
 
+  // HOOK ANIMACIÓN APPLE
+  const useFadeIn = () => {
+    const ref = useRef<any>(null);
+
+    useEffect(() => {
+      const el = ref.current;
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            el.classList.add("show");
+          }
+        },
+        { threshold: 0.2 }
+      );
+
+      observer.observe(el);
+      return () => observer.disconnect();
+    }, []);
+
+    return ref;
+  };
+
+  const heroRef = useFadeIn();
+  const nosotrosRef = useFadeIn();
+  const proyectosRef = useFadeIn();
+  const contactoRef = useFadeIn();
+
   // INTRO
   if (loading) {
     return (
@@ -72,8 +101,6 @@ export default function AndulkaSite() {
 
       {/* HEADER */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-10 py-4 md:py-6 z-50 text-white">
-
-        {/* LOGO + PAJARITO */}
         <div className="relative group cursor-pointer">
           <h1 className="tracking-[0.3em] text-xs md:text-sm font-medium transition-all duration-500 group-hover:tracking-[0.45em]">
             GRUPO ANDULKA
@@ -85,7 +112,6 @@ export default function AndulkaSite() {
           />
         </div>
 
-        {/* NAV */}
         <nav className="flex gap-2 md:gap-3 text-xs md:text-sm">
           {["proyectos","nosotros","contacto"].map((item) => (
             <a
@@ -100,7 +126,7 @@ export default function AndulkaSite() {
       </header>
 
       {/* HERO */}
-      <section className="h-screen relative flex items-end text-white overflow-hidden">
+      <section ref={heroRef} className="fade-section h-screen relative flex items-end text-white overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute w-full h-full object-cover">
           <source src="/hero.mp4" />
         </video>
@@ -118,7 +144,7 @@ export default function AndulkaSite() {
       </section>
 
       {/* NOSOTROS */}
-      <section id="nosotros" className="px-6 md:px-10 py-20 md:py-32">
+      <section ref={nosotrosRef} id="nosotros" className="fade-section px-6 md:px-10 py-20 md:py-32">
         <h3 className="text-xl md:text-2xl mb-6 font-medium tracking-wide">
           Nosotros
         </h3>
@@ -130,7 +156,7 @@ export default function AndulkaSite() {
       </section>
 
       {/* PROYECTOS */}
-      <section id="proyectos" className="px-6 md:px-10 py-20 md:py-24">
+      <section ref={proyectosRef} id="proyectos" className="fade-section px-6 md:px-10 py-20 md:py-24">
         <h3 className="text-xl md:text-2xl mb-12 md:mb-16 font-medium tracking-wide">
           Proyectos
         </h3>
@@ -169,7 +195,6 @@ export default function AndulkaSite() {
       {/* MODAL */}
       {active && proyectoActivo && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
-
           <button
             onClick={() => setActive(null)}
             className="absolute top-6 right-6 md:right-8 text-white text-2xl md:text-3xl z-50"
@@ -199,7 +224,7 @@ export default function AndulkaSite() {
       )}
 
       {/* CONTACTO */}
-      <section id="contacto" className="px-6 md:px-10 py-24 md:py-32 bg-black text-white">
+      <section ref={contactoRef} id="contacto" className="fade-section px-6 md:px-10 py-24 md:py-32 bg-black text-white">
         <h3 className="text-xl md:text-2xl mb-6 font-medium tracking-wide">
           Contacto
         </h3>
@@ -232,6 +257,20 @@ export default function AndulkaSite() {
           className="w-12 md:w-14 hover:scale-110 transition"
         />
       </a>
+
+      {/* ESTILOS ANIMACIÓN */}
+      <style jsx global>{`
+        .fade-section {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: all 0.9s ease;
+        }
+
+        .fade-section.show {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `}</style>
 
     </div>
   );
