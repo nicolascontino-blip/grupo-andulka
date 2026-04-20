@@ -38,7 +38,7 @@ export default function AndulkaSite() {
 
       {/* HEADER */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-10 py-6 z-50 text-white">
-    <div className="relative group cursor-pointer">
+   <div className="relative group cursor-pointer overflow-visible">
 
   <h1 className="tracking-widest text-sm transition-all duration-500 group-hover:tracking-[0.3em]">
     GRUPO ANDULKA
@@ -46,7 +46,18 @@ export default function AndulkaSite() {
 
   <img
     src="/PAJARITO1.png"
-    className="absolute -top-6 left-1/2 -translate-x-1/2 w-6 opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 transition-all duration-500"
+    className="
+      absolute 
+      top-0 
+      left-1/2 
+      -translate-x-1/2 
+      w-6 
+      opacity-0 
+      group-hover:opacity-100 
+      group-hover:-translate-y-6 
+      transition-all duration-500
+      pointer-events-none
+    "
   />
 
 </div>
@@ -129,7 +140,7 @@ export default function AndulkaSite() {
       className="flex items-center gap-2 hover:opacity-60 transition"
     >
       <span>Instagram</span>
-      <img src="/instagram.png" className="w-5 h-5" />
+      <img src="/instagram.png" className="w-5 h-5 object-contain mix-blend-lighten" />
     </a>
 
     <a 
@@ -138,7 +149,7 @@ export default function AndulkaSite() {
       className="flex items-center gap-2 hover:opacity-60 transition"
     >
       <span>LinkedIn</span>
-      <img src="/linkedin.png" className="w-5 h-5" />
+      <img src="/linkedin.png" className="w-5 h-5 object-contain mix-blend-lighten" />
     </a>
 
   </div>
