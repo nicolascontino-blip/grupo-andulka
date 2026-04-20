@@ -50,7 +50,7 @@ export default function AndulkaSite() {
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-        <h1 className="text-white text-4xl md:text-6xl tracking-[0.6em] animate-fadeIn font-semibold">
+        <h1 className="text-white text-4xl md:text-6xl tracking-[0.6em] font-medium animate-fadeIn">
           GRUPO ANDULKA
         </h1>
 
@@ -68,15 +68,14 @@ export default function AndulkaSite() {
   }
 
   return (
-    <div className="bg-white text-black font-sans">
+    <div className="bg-white text-black">
 
       {/* HEADER */}
       <header className="fixed top-0 left-0 w-full flex justify-between items-center px-6 md:px-10 py-4 md:py-6 z-50 text-white">
 
         {/* LOGO + PAJARITO */}
         <div className="relative group cursor-pointer">
-
-          <h1 className="tracking-widest text-xs md:text-sm transition-all duration-500 group-hover:tracking-[0.3em]">
+          <h1 className="tracking-[0.3em] text-xs md:text-sm font-medium transition-all duration-500 group-hover:tracking-[0.45em]">
             GRUPO ANDULKA
           </h1>
 
@@ -84,7 +83,6 @@ export default function AndulkaSite() {
             src="/PAJARITO1.png"
             className="absolute left-1/2 -translate-x-1/2 top-0 w-5 md:w-6 opacity-0 group-hover:opacity-100 group-hover:-translate-y-6 transition-all duration-500 pointer-events-none"
           />
-
         </div>
 
         {/* NAV */}
@@ -93,7 +91,7 @@ export default function AndulkaSite() {
             <a
               key={item}
               href={`#${item}`}
-              className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black transition"
+              className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black transition font-medium tracking-wide"
             >
               {item.charAt(0).toUpperCase() + item.slice(1)}
             </a>
@@ -110,7 +108,10 @@ export default function AndulkaSite() {
         <div className="absolute inset-0 bg-black/40"></div>
 
         <div className="relative p-6 md:p-16 max-w-3xl">
-          <h2 className="text-3xl md:text-7xl font-light leading-tight">
+          <h2
+            className="text-3xl md:text-7xl leading-tight"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
             Arquitectura que transforma espacios
           </h2>
         </div>
@@ -118,8 +119,11 @@ export default function AndulkaSite() {
 
       {/* NOSOTROS */}
       <section id="nosotros" className="px-6 md:px-10 py-20 md:py-32">
-        <h3 className="text-xl md:text-2xl mb-6">Nosotros</h3>
-        <p className="max-w-2xl text-gray-600 text-sm md:text-base">
+        <h3 className="text-xl md:text-2xl mb-6 font-medium tracking-wide">
+          Nosotros
+        </h3>
+
+        <p className="max-w-2xl text-gray-600 text-sm md:text-base leading-relaxed">
           Grupo Andulka desarrolla proyectos de arquitectura corporativa con foco en identidad,
           funcionalidad y diseño contemporáneo.
         </p>
@@ -127,7 +131,9 @@ export default function AndulkaSite() {
 
       {/* PROYECTOS */}
       <section id="proyectos" className="px-6 md:px-10 py-20 md:py-24">
-        <h3 className="text-xl md:text-2xl mb-12 md:mb-16">Proyectos</h3>
+        <h3 className="text-xl md:text-2xl mb-12 md:mb-16 font-medium tracking-wide">
+          Proyectos
+        </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {proyectos.map((p) => (
@@ -146,9 +152,11 @@ export default function AndulkaSite() {
 
               <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-end p-4 md:p-6 rounded-2xl">
                 <div className="flex justify-between w-full items-end text-sm md:text-base">
-                  <h4 className="text-white">{p.nombre}</h4>
+                  <h4 className="text-white font-medium tracking-wide">
+                    {p.nombre}
+                  </h4>
 
-                  <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-black transition text-white text-xs md:text-sm">
+                  <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-black transition text-white text-xs md:text-sm font-medium">
                     VER PROYECTO
                   </span>
                 </div>
@@ -192,9 +200,11 @@ export default function AndulkaSite() {
 
       {/* CONTACTO */}
       <section id="contacto" className="px-6 md:px-10 py-24 md:py-32 bg-black text-white">
-        <h3 className="text-xl md:text-2xl mb-6">Contacto</h3>
+        <h3 className="text-xl md:text-2xl mb-6 font-medium tracking-wide">
+          Contacto
+        </h3>
 
-        <p className="opacity-70 mb-8 text-sm md:text-base">
+        <p className="opacity-70 mb-8 text-sm md:text-base leading-relaxed">
           info@grupoandulka.com
         </p>
 
