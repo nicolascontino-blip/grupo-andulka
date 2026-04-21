@@ -11,12 +11,12 @@ export default function AndulkaSite() {
     {
       id: 1,
       nombre: "VALO",
-      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg"],
+      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"],
     },
     {
       id: 2,
       nombre: "CEBALLOS & CEBALLOS",
-      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg"],
+      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg","/ceballos4.jpg","/ceballos5.jpg"],
     },
     {
       id: 3,
@@ -46,7 +46,7 @@ export default function AndulkaSite() {
     );
   };
 
-  // ✅ TECLADO FUNCIONANDO
+  // ✅ TECLADO
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (active === null) return;
@@ -122,7 +122,17 @@ export default function AndulkaSite() {
 
       {/* HERO */}
       <section className="h-screen relative flex items-end text-white overflow-hidden">
-        <div className="absolute w-full h-full bg-gray-300" />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute w-full h-full object-cover"
+        >
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+
+        <div className="absolute inset-0 bg-black/40"></div>
 
         <div className="relative p-6 md:p-16 max-w-3xl">
           <h2 className="text-3xl md:text-7xl leading-tight font-light">
@@ -173,17 +183,43 @@ export default function AndulkaSite() {
         </div>
       </section>
 
-      {/* MODAL */}
+      {/* MODAL PRO */}
       {active && proyectoActivo && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
-          <button onClick={() => setActive(null)} className="absolute top-6 right-6 text-white text-3xl">✕</button>
+        <div
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
+          onClick={() => setActive(null)}
+        >
+          {/* BOTÓN X */}
+          <button
+            onClick={() => setActive(null)}
+            className="absolute top-6 right-6 z-50 text-white text-3xl md:text-4xl bg-black/40 backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition"
+          >
+            ✕
+          </button>
 
-          <div className="absolute left-0 w-1/2 h-full" onClick={prevImage}/>
-          <div className="absolute right-0 w-1/2 h-full" onClick={nextImage}/>
+          {/* ZONA IZQUIERDA */}
+          <div
+            className="absolute left-0 w-1/2 h-full"
+            onClick={(e) => {
+              e.stopPropagation();
+              prevImage();
+            }}
+          />
 
+          {/* ZONA DERECHA */}
+          <div
+            className="absolute right-0 w-1/2 h-full"
+            onClick={(e) => {
+              e.stopPropagation();
+              nextImage();
+            }}
+          />
+
+          {/* IMAGEN */}
           <img
             key={currentImg}
             src={proyectoActivo.imagenes[currentImg]}
+            onClick={(e) => e.stopPropagation()}
             className="max-h-[80vh] max-w-[90vw] object-contain rounded-xl"
           />
         </div>
