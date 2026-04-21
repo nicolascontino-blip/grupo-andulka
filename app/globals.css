@@ -12,15 +12,15 @@
   }
 }
 
-/* 🔥 ANIMACIONES */
+/* ANIMACIONES */
 
 .fade-section {
-  opacity: 0;
-  transform: translateY(40px);
+  opacity: 1;
+  transform: translateY(0);
   transition: all 0.9s ease;
 }
 
-.fade-section.show {
-  opacity: 1;
-  transform: translateY(0);
+.fade-section.hidden {
+  opacity: 0;
+  transform: translateY(40px);
 }

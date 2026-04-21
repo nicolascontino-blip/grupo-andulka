@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function AndulkaSite() {
   const [active, setActive] = useState<number | null>(null);
@@ -11,12 +11,12 @@ export default function AndulkaSite() {
     {
       id: 1,
       nombre: "VALO",
-      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"],
+      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg"],
     },
     {
       id: 2,
       nombre: "CEBALLOS & CEBALLOS",
-      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg","/ceballos4.jpg","/ceballos5.jpg"],
+      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg"],
     },
     {
       id: 3,
@@ -46,7 +46,7 @@ export default function AndulkaSite() {
     );
   };
 
-  // 🔥 NAVEGACIÓN TECLADO (FIX REAL)
+  // ✅ TECLADO FUNCIONANDO
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (active === null) return;
@@ -67,40 +67,8 @@ export default function AndulkaSite() {
     };
 
     document.addEventListener("keydown", handleKey);
-
-    return () => {
-      document.removeEventListener("keydown", handleKey);
-    };
+    return () => document.removeEventListener("keydown", handleKey);
   }, [active, currentImg]);
-
-  // 🔥 HOOK ANIMACIÓN
-  const useFadeIn = () => {
-    const ref = useRef<any>(null);
-
-    useEffect(() => {
-      const el = ref.current;
-      if (!el) return;
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            el.classList.add("show");
-          }
-        },
-        { threshold: 0.2 }
-      );
-
-      observer.observe(el);
-      return () => observer.disconnect();
-    }, []);
-
-    return ref;
-  };
-
-  const heroRef = useFadeIn();
-  const nosotrosRef = useFadeIn();
-  const proyectosRef = useFadeIn();
-  const contactoRef = useFadeIn();
 
   // INTRO
   if (loading) {
@@ -153,32 +121,28 @@ export default function AndulkaSite() {
       </header>
 
       {/* HERO */}
-      <section ref={heroRef} className="fade-section h-screen relative flex items-end text-white overflow-hidden">
-        <video autoPlay loop muted playsInline className="absolute w-full h-full object-cover">
-          <source src="/hero.mp4" />
-        </video>
-
-        <div className="absolute inset-0 bg-black/40"></div>
+      <section className="h-screen relative flex items-end text-white overflow-hidden">
+        <div className="absolute w-full h-full bg-gray-300" />
 
         <div className="relative p-6 md:p-16 max-w-3xl">
-          <h2 className="text-3xl md:text-7xl leading-tight" style={{ fontFamily: "var(--font-playfair)" }}>
+          <h2 className="text-3xl md:text-7xl leading-tight font-light">
             Arquitectura que transforma espacios
           </h2>
         </div>
       </section>
 
       {/* NOSOTROS */}
-      <section ref={nosotrosRef} id="nosotros" className="fade-section px-6 md:px-10 py-20 md:py-32">
-        <h3 className="text-xl md:text-2xl mb-6 font-medium tracking-wide">Nosotros</h3>
-        <p className="max-w-2xl text-gray-600 text-sm md:text-base leading-relaxed">
+      <section id="nosotros" className="px-6 md:px-10 py-20 md:py-32">
+        <h3 className="text-xl md:text-2xl mb-6 font-medium">Nosotros</h3>
+        <p className="max-w-2xl text-gray-600 text-sm md:text-base">
           Grupo Andulka desarrolla proyectos de arquitectura corporativa con foco en identidad,
           funcionalidad y diseño contemporáneo.
         </p>
       </section>
 
       {/* PROYECTOS */}
-      <section ref={proyectosRef} id="proyectos" className="fade-section px-6 md:px-10 py-20 md:py-24">
-        <h3 className="text-xl md:text-2xl mb-12 md:mb-16 font-medium tracking-wide">Proyectos</h3>
+      <section id="proyectos" className="px-6 md:px-10 py-20 md:py-24">
+        <h3 className="text-xl md:text-2xl mb-12 md:mb-16 font-medium">Proyectos</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {proyectos.map((p) => (
@@ -196,10 +160,10 @@ export default function AndulkaSite() {
               />
 
               <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-end p-4 md:p-6 rounded-2xl">
-                <div className="flex justify-between w-full items-end text-sm md:text-base">
-                  <h4 className="text-white font-medium tracking-wide">{p.nombre}</h4>
+                <div className="flex justify-between w-full items-end">
+                  <h4 className="text-white">{p.nombre}</h4>
 
-                  <span className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 hover:bg-white hover:text-black transition text-white text-xs md:text-sm font-medium">
+                  <span className="px-4 py-2 rounded-full bg-white/10 border border-white/30 hover:bg-white hover:text-black transition text-white text-xs">
                     VER PROYECTO
                   </span>
                 </div>
@@ -212,7 +176,7 @@ export default function AndulkaSite() {
       {/* MODAL */}
       {active && proyectoActivo && (
         <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
-          <button onClick={() => setActive(null)} className="absolute top-6 right-6 md:right-8 text-white text-2xl md:text-3xl z-50">✕</button>
+          <button onClick={() => setActive(null)} className="absolute top-6 right-6 text-white text-3xl">✕</button>
 
           <div className="absolute left-0 w-1/2 h-full" onClick={prevImage}/>
           <div className="absolute right-0 w-1/2 h-full" onClick={nextImage}/>
@@ -220,49 +184,34 @@ export default function AndulkaSite() {
           <img
             key={currentImg}
             src={proyectoActivo.imagenes[currentImg]}
-            className="max-h-[70vh] md:max-h-[80vh] max-w-[90vw] md:max-w-[80vw] object-contain rounded-xl animate-fadeImage"
+            className="max-h-[80vh] max-w-[90vw] object-contain rounded-xl"
           />
-
-          <style jsx>{`
-            @keyframes fadeImage {
-              0% { opacity: 0; transform: scale(0.97); }
-              100% { opacity: 1; transform: scale(1); }
-            }
-            .animate-fadeImage {
-              animation: fadeImage 0.4s ease;
-            }
-          `}</style>
         </div>
       )}
 
       {/* CONTACTO */}
-      <section ref={contactoRef} id="contacto" className="fade-section px-6 md:px-10 py-24 md:py-32 bg-black text-white">
-        <h3 className="text-xl md:text-2xl mb-6 font-medium tracking-wide">Contacto</h3>
+      <section id="contacto" className="px-6 md:px-10 py-24 md:py-32 bg-black text-white">
+        <h3 className="text-xl md:text-2xl mb-6">Contacto</h3>
 
-        <p className="opacity-70 mb-8 text-sm md:text-base leading-relaxed">
-          info@grupoandulka.com
-        </p>
+        <p className="opacity-70 mb-8">info@grupoandulka.com</p>
 
-        <div className="flex gap-6 md:gap-8 text-sm">
-          <a href="https://instagram.com/grupoandulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60">
-            <span>Instagram</span>
-            <img src="/instagram.png" className="w-4 md:w-5 mix-blend-lighten" />
+        <div className="flex gap-6 text-sm">
+          <a href="https://instagram.com/grupoandulka/" target="_blank" className="flex items-center gap-2">
+            Instagram
+            <img src="/instagram.png" className="w-4 mix-blend-lighten" />
           </a>
 
-          <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" className="flex items-center gap-2 hover:opacity-60">
-            <span>LinkedIn</span>
-            <img src="/linkedin.png" className="w-4 md:w-5 mix-blend-lighten" />
+          <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" className="flex items-center gap-2">
+            LinkedIn
+            <img src="/linkedin.png" className="w-4 mix-blend-lighten" />
           </a>
         </div>
       </section>
 
       {/* WHATSAPP */}
-      <a href="https://wa.me/5491155672356" target="_blank" className="fixed bottom-4 md:bottom-6 right-4 md:right-6 z-50">
-        <img src="/WAPP.png" className="w-12 md:w-14 hover:scale-110 transition" />
+      <a href="https://wa.me/5491155672356" target="_blank" className="fixed bottom-6 right-6 z-50">
+        <img src="/WAPP.png" className="w-14 hover:scale-110 transition" />
       </a>
-
-      {/* ANIMACIÓN */}
-    
 
     </div>
   );
