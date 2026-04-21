@@ -345,7 +345,7 @@ export default function AndulkaSite() {
             personas trabajan, crean y se relacionan.
           </p>
           <div className="stats-grid">
-            {[["5+","Años de trayectoria"],["10+","Proyectos realizados"],["7","Clientes activos"],["3","Países"]].map(([n,l]) => (
+            {[["5+","Años de trayectoria"],["10+","Proyectos realizados"],["7","Clientes activos"]].map(([n,l]) => (
               <div key={l}>
                 <p className="stat-num">{n}</p>
                 <p className="stat-label">{l}</p>
