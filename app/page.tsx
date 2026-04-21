@@ -1,22 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function AndulkaSite() {
   const [active, setActive] = useState<number | null>(null);
   const [currentImg, setCurrentImg] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const [dragging, setDragging] = useState(false);
+  const [translateX, setTranslateX] = useState(0);
+
+  const startX = useRef(0);
+
   const proyectos = [
     {
       id: 1,
       nombre: "VALO",
-      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"],
+      imagenes: ["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg"],
     },
     {
       id: 2,
       nombre: "CEBALLOS & CEBALLOS",
-      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg","/ceballos4.jpg","/ceballos5.jpg"],
+      imagenes: ["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg"],
     },
     {
       id: 3,
@@ -46,7 +51,7 @@ export default function AndulkaSite() {
     );
   };
 
-  // ✅ TECLADO
+  // 🎯 TECLADO
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (active === null) return;
@@ -70,11 +75,34 @@ export default function AndulkaSite() {
     return () => document.removeEventListener("keydown", handleKey);
   }, [active, currentImg]);
 
+  // 🖐️ SWIPE START
+  const handleStart = (clientX: number) => {
+    setDragging(true);
+    startX.current = clientX;
+  };
+
+  // 🖐️ SWIPE MOVE
+  const handleMove = (clientX: number) => {
+    if (!dragging) return;
+    setTranslateX(clientX - startX.current);
+  };
+
+  // 🖐️ SWIPE END
+  const handleEnd = () => {
+    if (!dragging) return;
+
+    if (translateX > 100) prevImage();
+    else if (translateX < -100) nextImage();
+
+    setTranslateX(0);
+    setDragging(false);
+  };
+
   // INTRO
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-        <h1 className="text-white text-4xl md:text-6xl tracking-[0.6em] font-medium animate-fadeIn">
+        <h1 className="text-white text-5xl md:text-7xl tracking-[0.6em] font-medium animate-fadeIn">
           GRUPO ANDULKA
         </h1>
 
@@ -112,7 +140,7 @@ export default function AndulkaSite() {
             <a
               key={item}
               href={`#${item}`}
-              className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black transition font-medium tracking-wide"
+              className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white hover:text-black transition"
             >
               {item.charAt(0).toUpperCase() + item.slice(1)}
             </a>
@@ -122,37 +150,22 @@ export default function AndulkaSite() {
 
       {/* HERO */}
       <section className="h-screen relative flex items-end text-white overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute w-full h-full object-cover"
-        >
-          <source src="/hero.mp4" type="video/mp4" />
+        <video autoPlay loop muted playsInline className="absolute w-full h-full object-cover">
+          <source src="/hero.mp4" />
         </video>
 
         <div className="absolute inset-0 bg-black/40"></div>
 
         <div className="relative p-6 md:p-16 max-w-3xl">
-          <h2 className="text-3xl md:text-7xl leading-tight font-light">
+          <h2 className="text-3xl md:text-7xl font-light leading-tight">
             Arquitectura que transforma espacios
           </h2>
         </div>
       </section>
 
-      {/* NOSOTROS */}
-      <section id="nosotros" className="px-6 md:px-10 py-20 md:py-32">
-        <h3 className="text-xl md:text-2xl mb-6 font-medium">Nosotros</h3>
-        <p className="max-w-2xl text-gray-600 text-sm md:text-base">
-          Grupo Andulka desarrolla proyectos de arquitectura corporativa con foco en identidad,
-          funcionalidad y diseño contemporáneo.
-        </p>
-      </section>
-
       {/* PROYECTOS */}
       <section id="proyectos" className="px-6 md:px-10 py-20 md:py-24">
-        <h3 className="text-xl md:text-2xl mb-12 md:mb-16 font-medium">Proyectos</h3>
+        <h3 className="text-xl md:text-2xl mb-12 md:mb-16">Proyectos</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {proyectos.map((p) => (
@@ -169,7 +182,7 @@ export default function AndulkaSite() {
                 className="h-64 md:h-80 w-full object-cover group-hover:scale-105 transition rounded-2xl"
               />
 
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-end p-4 md:p-6 rounded-2xl">
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-end p-6">
                 <div className="flex justify-between w-full items-end">
                   <h4 className="text-white">{p.nombre}</h4>
 
@@ -183,70 +196,50 @@ export default function AndulkaSite() {
         </div>
       </section>
 
-      {/* MODAL PRO */}
+      {/* MODAL PRO CON SWIPE */}
       {active && proyectoActivo && (
         <div
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center overflow-hidden"
           onClick={() => setActive(null)}
         >
-          {/* BOTÓN X */}
           <button
             onClick={() => setActive(null)}
-            className="absolute top-6 right-6 z-50 text-white text-3xl md:text-4xl bg-black/40 backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center hover:scale-110 transition"
+            className="absolute top-6 right-6 z-50 text-white text-3xl bg-black/40 rounded-full w-10 h-10"
           >
             ✕
           </button>
 
-          {/* ZONA IZQUIERDA */}
           <div
-            className="absolute left-0 w-1/2 h-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              prevImage();
-            }}
-          />
-
-          {/* ZONA DERECHA */}
-          <div
-            className="absolute right-0 w-1/2 h-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              nextImage();
-            }}
-          />
-
-          {/* IMAGEN */}
-          <img
-            key={currentImg}
-            src={proyectoActivo.imagenes[currentImg]}
+            className="relative w-full h-full flex items-center justify-center"
+            onMouseDown={(e) => handleStart(e.clientX)}
+            onMouseMove={(e) => handleMove(e.clientX)}
+            onMouseUp={handleEnd}
+            onMouseLeave={handleEnd}
+            onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+            onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+            onTouchEnd={handleEnd}
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[80vh] max-w-[90vw] object-contain rounded-xl"
-          />
+          >
+            <img
+              src={proyectoActivo.imagenes[currentImg]}
+              style={{
+                transform: `translateX(${translateX}px)`,
+                transition: dragging ? "none" : "transform 0.4s ease",
+              }}
+              className="max-h-[80vh] max-w-[90vw] object-contain rounded-xl"
+            />
+          </div>
         </div>
       )}
 
       {/* CONTACTO */}
-      <section id="contacto" className="px-6 md:px-10 py-24 md:py-32 bg-black text-white">
-        <h3 className="text-xl md:text-2xl mb-6">Contacto</h3>
-
-        <p className="opacity-70 mb-8">info@grupoandulka.com</p>
-
-        <div className="flex gap-6 text-sm">
-          <a href="https://instagram.com/grupoandulka/" target="_blank" className="flex items-center gap-2">
-            Instagram
-            <img src="/instagram.png" className="w-4 mix-blend-lighten" />
-          </a>
-
-          <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" className="flex items-center gap-2">
-            LinkedIn
-            <img src="/linkedin.png" className="w-4 mix-blend-lighten" />
-          </a>
-        </div>
+      <section id="contacto" className="px-6 md:px-10 py-24 bg-black text-white">
+        <p>info@grupoandulka.com</p>
       </section>
 
       {/* WHATSAPP */}
-      <a href="https://wa.me/5491155672356" target="_blank" className="fixed bottom-6 right-6 z-50">
-        <img src="/WAPP.png" className="w-14 hover:scale-110 transition" />
+      <a href="https://wa.me/5491155672356" className="fixed bottom-6 right-6">
+        <img src="/WAPP.png" className="w-14" />
       </a>
 
     </div>
