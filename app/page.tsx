@@ -11,6 +11,7 @@ type Proyecto = {
   imagenes: string[];
   descripcion: string;
   video?: string;
+  m2: number;
 };
 
 const proyectos: Proyecto[] = [
@@ -19,6 +20,7 @@ const proyectos: Proyecto[] = [
     nombre: "VALO",
     categoria: "Arquitectura Corporativa",
     año: "2025",
+    m2: 500,
     portada: "/valo1.jpg",
     imagenes: [
       "/valo1.jpg", "/valo2.jpg", "/valo3.jpg", "/valo4.jpg", "/valo5.jpg",
@@ -32,6 +34,7 @@ const proyectos: Proyecto[] = [
     nombre: "CEBALLOS & CEBALLOS",
     categoria: "Arquitectura Corporativa",
     año: "2022",
+    m2: 170,
     portada: "/ceballos1.jpg",
     imagenes: [
       "/ceballos1.jpg", "/ceballos2.jpg", "/ceballos3.jpg", "/ceballos4.jpg", "/ceballos5.jpg",
@@ -44,7 +47,8 @@ const proyectos: Proyecto[] = [
     id: 3,
     nombre: "LA EUROPEA",
     categoria: "Arquitectura Corporativa",
-    año: "2022",
+    año: "2026",
+    m2: 160,
     portada: "/europea6.jpg",
     imagenes: [
       "/europea6.jpg", "/europea1.jpg", "/europea2.jpg",
@@ -58,7 +62,8 @@ const proyectos: Proyecto[] = [
     id: 4,
     nombre: "SS SERVICIOS",
     categoria: "Arquitectura Corporativa",
-    año: "",
+    año: "2022",
+    m2: 460,
     portada: "/ssservicios1.png",
     imagenes: ["/ssservicios1.png", "/ssservicios2.png"],
     descripcion:
@@ -71,11 +76,45 @@ export default function AndulkaSite() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<Proyecto | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [workplacesText, setWorkplacesText] = useState("WORKPLACES");
   const touchStart = useRef<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1800);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const target = "WORKPLACES";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let step = 0;
+    let timeoutId: number;
+
+    const animate = () => {
+      const fixed = Math.floor(step / 3);
+      const text = target
+        .split("")
+        .map((letter, index) =>
+          index < fixed ? letter : chars[Math.floor(Math.random() * chars.length)]
+        )
+        .join("");
+
+      setWorkplacesText(text);
+      step += 1;
+
+      if (fixed <= target.length) {
+        timeoutId = window.setTimeout(animate, 48);
+      } else {
+        setWorkplacesText(target);
+        timeoutId = window.setTimeout(() => {
+          step = 0;
+          animate();
+        }, 4200);
+      }
+    };
+
+    timeoutId = window.setTimeout(animate, 700);
+    return () => window.clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
@@ -142,7 +181,7 @@ export default function AndulkaSite() {
           <header className="project-header">
             <button className="text-button" onClick={() => setActive(null)}>← Volver</button>
             <button className="brand-button" onClick={() => setActive(null)}>GRUPO ANDULKA</button>
-            <span className="project-year">{active.año}</span>
+            <span className="project-year">{active.año} · {active.m2} m²</span>
           </header>
 
           <section className="project-intro">
@@ -150,7 +189,10 @@ export default function AndulkaSite() {
               <p className="eyebrow">{active.categoria}</p>
               <h1>{active.nombre}</h1>
             </div>
-            <p className="project-description">{active.descripcion}</p>
+            <div className="project-description-wrap">
+              <p className="project-description">{active.descripcion}</p>
+              <p className="project-facts">{active.año} · {active.m2} m²</p>
+            </div>
           </section>
 
           <section className="project-hero">
@@ -168,7 +210,7 @@ export default function AndulkaSite() {
           <section className="project-gallery">
             {active.imagenes.slice(1).map((src, i) => (
               <figure
-                className={i % 3 === 1 ? "gallery-wide inset" : "gallery-wide"}
+                className={`${i % 3 === 1 ? "gallery-wide inset" : "gallery-wide"} ${i % 2 === 0 ? "drift-left" : "drift-right"}`}
                 key={`${src}-${i}`}
               >
                 <img src={src} alt={`${active.nombre} — imagen ${i + 2}`} loading="lazy" />
@@ -233,7 +275,7 @@ export default function AndulkaSite() {
           </video>
           <div className="hero-shade" />
           <div className="hero-copy">
-            <p>Arquitectura · Interiorismo · Workplace</p>
+            <p>Arquitectura · Interiorismo · <span className="scramble-word">{workplacesText}</span></p>
             <h1>Espacios que<br />transforman.</h1>
             <a href="#proyectos" className="hero-scroll">Ver proyectos ↓</a>
           </div>
@@ -346,6 +388,7 @@ function GlobalStyles() {
       .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(0,0,0,.05) 45%,rgba(0,0,0,.42))}
       .hero-copy{position:absolute;inset:0;padding:110px 30px 34px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff}
       .hero-copy>p{position:absolute;top:105px;left:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+      .scramble-word{display:inline-block;min-width:82px;letter-spacing:.12em}
       .hero-copy h1{font-size:clamp(58px,10.8vw,170px);font-weight:300;letter-spacing:-.055em;line-height:.82}
       .hero-scroll{align-self:flex-end;margin-top:-22px;text-decoration:none;font-size:12px}
 
@@ -395,13 +438,19 @@ function GlobalStyles() {
       .project-year{justify-self:end;font-size:11px}
       .project-intro{padding:100px 30px 75px;display:grid;grid-template-columns:1.5fr .55fr;gap:10vw;align-items:end}
       .project-intro h1{font-size:clamp(58px,10vw,150px);font-weight:300;line-height:.85;letter-spacing:-.06em;margin-top:24px;max-width:1100px}
-      .project-description{font-size:15px;line-height:1.65;font-weight:300;max-width:420px}
+      .project-description-wrap{max-width:420px}
+      .project-description{font-size:15px;line-height:1.65;font-weight:300}
+      .project-facts{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
       .project-hero{height:92vh;min-height:620px;padding:0 30px}
       .project-hero img{height:100%;object-fit:cover}
       .project-video{padding:30px 30px 0}
       .project-video video{display:block;width:100%;max-height:92vh;object-fit:cover;background:#111}
       .project-gallery{padding:30px}
-      .gallery-wide{margin:0 0 30px}
+      .gallery-wide{margin:0 0 30px;will-change:transform}
+      @keyframes driftLeft{from{transform:translateX(4.5vw)}to{transform:translateX(-4.5vw)}}
+      @keyframes driftRight{from{transform:translateX(-4.5vw)}to{transform:translateX(4.5vw)}}
+      .drift-left{animation:driftLeft linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
+      .drift-right{animation:driftRight linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
       .gallery-wide img{width:100%;max-height:92vh;object-fit:cover}
       .gallery-wide.inset{width:74%;margin:140px auto}
       .gallery-pair{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:140px 0}
@@ -458,6 +507,7 @@ function GlobalStyles() {
         .project-video video{max-height:72svh}
         .project-gallery{padding:18px}
         .gallery-wide{margin-bottom:18px}
+        .drift-left,.drift-right{animation-range:entry 15% exit 85%}
         .gallery-wide.inset{width:100%;margin:70px 0}
         .gallery-pair{grid-template-columns:1fr;gap:18px;margin:70px 0}
         .gallery-pair figure{height:62svh}
