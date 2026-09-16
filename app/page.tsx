@@ -1,456 +1,458 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&";
+type Proyecto = {
+  id: number;
+  nombre: string;
+  categoria: string;
+  año: string;
+  portada: string;
+  imagenes: string[];
+  descripcion: string;
+};
 
-function useScramble(finalText: string, trigger: boolean, speed = 35, revealDelay = 55) {
-  const [display, setDisplay] = useState("");
-  const frameRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (!trigger) return;
-    let iteration = 0;
-    const total = finalText.length;
-    const tick = () => {
-      const revealed = Math.floor(iteration / (revealDelay / speed));
-      const next = finalText.split("").map((char, i) => {
-        if (char === " " || char === "\n") return char;
-        if (i < revealed) return char;
-        return CHARS[Math.floor(Math.random() * CHARS.length)];
-      }).join("");
-      setDisplay(next);
-      iteration++;
-      if (revealed < total) { frameRef.current = setTimeout(tick, speed); }
-      else { setDisplay(finalText); }
-    };
-    tick();
-    return () => { if (frameRef.current) clearTimeout(frameRef.current); };
-  }, [trigger, finalText]);
-
-  return display;
-}
+const proyectos: Proyecto[] = [
+  {
+    id: 1,
+    nombre: "VALO",
+    categoria: "Arquitectura Corporativa",
+    año: "2025",
+    portada: "/valo1.jpg",
+    imagenes: ["/valo1.jpg", "/valo2.jpg", "/valo3.jpg", "/valo4.jpg", "/valo5.jpg"],
+    descripcion:
+      "Arquitectura e interiorismo corporativo concebidos como una experiencia integral de trabajo, identidad y encuentro.",
+  },
+  {
+    id: 2,
+    nombre: "CEBALLOS & CEBALLOS",
+    categoria: "Arquitectura Corporativa",
+    año: "2022",
+    portada: "/ceballos1.jpg",
+    imagenes: [
+      "/ceballos1.jpg",
+      "/ceballos2.jpg",
+      "/ceballos3.jpg",
+      "/ceballos4.jpg",
+      "/ceballos5.jpg",
+      // Cuando subamos el resto del material a /public/ceballos/,
+      // agregamos aquí las nuevas imágenes del mismo proyecto.
+    ],
+    descripcion:
+      "Una oficina donde madera, vidrio, iluminación y piezas de arte construyen una atmósfera cálida, sobria y contemporánea.",
+  },
+  {
+    id: 3,
+    nombre: "PROYECTO 3",
+    categoria: "Diseño de Espacios",
+    año: "2022",
+    portada: "/proyecto3.jpg",
+    imagenes: ["/proyecto3.jpg"],
+    descripcion:
+      "Diseño interior enfocado en materialidad, proporción y una lectura clara del espacio.",
+  },
+];
 
 export default function AndulkaSite() {
-  const [active, setActive] = useState<number | null>(null);
-  const [currentImg, setCurrentImg] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [heroReady, setHeroReady] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [birdVisible, setBirdVisible] = useState(false);
-  const [birdY, setBirdY] = useState(0);
-  const birdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const proyectos = [
-    { id:1, nombre:"VALO",              categoria:"Arquitectura Corporativa", año:"2025", imagenes:["/valo1.jpg","/valo2.jpg","/valo3.jpg","/valo4.jpg","/valo5.jpg"] },
-    { id:2, nombre:"CEBALLOS & CEBALLOS", categoria:"Arquitectura Corporativa", año:"2022", imagenes:["/ceballos1.jpg","/ceballos2.jpg","/ceballos3.jpg","/ceballos4.jpg","/ceballos5.jpg"] },
-    { id:3, nombre:"PROYECTO 3",         categoria:"Diseño de Espacios",       año:"2022", imagenes:["/proyecto3.jpg"] },
-  ];
+  const [active, setActive] = useState<Proyecto | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const touchStart = useRef<number | null>(null);
 
   useEffect(() => {
-    const t = setTimeout(() => {
-      setLoading(false);
-      setTimeout(() => setHeroReady(true), 300);
-    }, 2800);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setLoading(false), 1800);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 40);
-      const fraction = Math.min(y / (document.body.scrollHeight - window.innerHeight), 1);
-      setBirdY(15 + fraction * 60);
-      setBirdVisible(true);
-      if (birdTimer.current) clearTimeout(birdTimer.current);
-      birdTimer.current = setTimeout(() => setBirdVisible(false), 1200);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { window.removeEventListener("scroll", onScroll); if (birdTimer.current) clearTimeout(birdTimer.current); };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const proyectoActivo = proyectos.find((p) => p.id === active);
-  const nextImage = () => { if (!proyectoActivo) return; setCurrentImg((p) => (p === proyectoActivo.imagenes.length - 1 ? 0 : p + 1)); };
-  const prevImage = () => { if (!proyectoActivo) return; setCurrentImg((p) => (p === 0 ? proyectoActivo.imagenes.length - 1 : p - 1)); };
+  useEffect(() => {
+    document.body.style.overflow = active || menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [active, menuOpen]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (active === null) return;
-      if (e.key === "ArrowRight" || e.code === "Space") { e.preventDefault(); nextImage(); }
-      if (e.key === "ArrowLeft") { e.preventDefault(); prevImage(); }
-      if (e.key === "Escape") setActive(null);
+      if (e.key === "Escape") {
+        setActive(null);
+        setMenuOpen(false);
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [active, currentImg]);
+  }, []);
 
-  const line1 = useScramble("Creamos\nespacios", heroReady);
-  const line2 = useScramble("que\ntransforman", heroReady);
+  const openProject = (p: Proyecto) => {
+    setActive(p);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
 
-  // ── INTRO ─────────────────────────────────────────────────────────────────
   if (loading) {
     return (
       <>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap');
-          @keyframes introPulse {
-            0%   { opacity:0; letter-spacing:0.45em; }
-            30%  { opacity:1; letter-spacing:0.28em; }
-            70%  { opacity:1; letter-spacing:0.28em; }
-            100% { opacity:0; letter-spacing:0.38em; }
+          *{box-sizing:border-box}
+          body{margin:0;background:#f3f0eb}
+          @keyframes intro {
+            0%{opacity:0;letter-spacing:.45em}
+            30%{opacity:1;letter-spacing:.28em}
+            72%{opacity:1;letter-spacing:.28em}
+            100%{opacity:0;letter-spacing:.38em}
           }
-          .intro-text { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:400; color:#1a1a1a; text-transform:uppercase; animation:introPulse 2.8s cubic-bezier(0.4,0,0.2,1) forwards; }
+          .intro{
+            position:fixed;inset:0;display:grid;place-items:center;
+            background:#f3f0eb;color:#171717;font-family:'DM Sans',sans-serif;
+          }
+          .intro span{font-size:12px;font-weight:500;animation:intro 1.8s ease forwards}
         `}</style>
-        <div style={{ position:"fixed", inset:0, background:"#F9F7F5", display:"flex", alignItems:"center", justifyContent:"center", zIndex:9999 }}>
-          <p className="intro-text">GRUPO ANDULKA</p>
-        </div>
+        <div className="intro"><span>GRUPO ANDULKA</span></div>
       </>
     );
   }
 
-  // ── MAIN ──────────────────────────────────────────────────────────────────
+  if (active) {
+    const index = proyectos.findIndex((p) => p.id === active.id);
+    const next = proyectos[(index + 1) % proyectos.length];
+
+    return (
+      <>
+        <GlobalStyles />
+        <main className="project-page">
+          <header className="project-header">
+            <button className="text-button" onClick={() => setActive(null)}>← Volver</button>
+            <button className="brand-button" onClick={() => setActive(null)}>GRUPO ANDULKA</button>
+            <span className="project-year">{active.año}</span>
+          </header>
+
+          <section className="project-intro">
+            <div>
+              <p className="eyebrow">{active.categoria}</p>
+              <h1>{active.nombre}</h1>
+            </div>
+            <p className="project-description">{active.descripcion}</p>
+          </section>
+
+          <section className="project-hero">
+            <img src={active.portada} alt={active.nombre} />
+          </section>
+
+          <section className="project-gallery">
+            {active.imagenes.slice(1).map((src, i) => {
+              const mode = i % 5;
+              if (mode === 1 && active.imagenes[i + 2]) {
+                return null;
+              }
+              if (mode === 2) {
+                const prev = active.imagenes[i];
+                return (
+                  <div className="gallery-pair" key={`${src}-${i}`}>
+                    <figure><img src={prev} alt="" loading="lazy" /></figure>
+                    <figure><img src={src} alt="" loading="lazy" /></figure>
+                  </div>
+                );
+              }
+              return (
+                <figure className={mode === 3 ? "gallery-wide inset" : "gallery-wide"} key={`${src}-${i}`}>
+                  <img src={src} alt="" loading="lazy" />
+                </figure>
+              );
+            })}
+          </section>
+
+          <section className="next-project" onClick={() => setActive(next)}>
+            <p className="eyebrow">Siguiente proyecto</p>
+            <div className="next-row">
+              <h2>{next.nombre}</h2>
+              <span>↗</span>
+            </div>
+            <div className="next-image">
+              <img src={next.portada} alt={next.nombre} />
+            </div>
+          </section>
+
+          <footer className="minimal-footer">
+            <span>© {new Date().getFullYear()} Grupo Andulka</span>
+            <span>Buenos Aires, Argentina</span>
+          </footer>
+        </main>
+      </>
+    );
+  }
+
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html{scroll-behavior:smooth}
-        body{font-family:'DM Sans',sans-serif;background:#F9F7F5;color:#1a1a1a;-webkit-font-smoothing:antialiased}
+      <GlobalStyles />
 
-        /* ── PAJARITO ── */
-        @keyframes birdFly{0%{left:-80px;opacity:0;transform:translateY(0)}8%{opacity:1}45%{transform:translateY(-18px)}55%{transform:translateY(4px)}70%{transform:translateY(-10px)}85%{transform:translateY(2px)}92%{opacity:1}100%{left:calc(100vw + 80px);opacity:0;transform:translateY(0)}}
-        .bird{position:fixed;z-index:9990;pointer-events:none;width:52px;animation:birdFly 2.2s cubic-bezier(0.4,0,0.2,1) forwards}
-
-        /* ── HEADER ── */
-        .site-header{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:22px 32px;transition:background 0.4s,backdrop-filter 0.4s}
-        .site-header.scrolled{background:rgba(249,247,245,0.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,26,26,0.08)}
-        .header-logo{position:absolute;left:50%;transform:translateX(-50%);font-size:13px;font-weight:500;letter-spacing:0.22em;text-decoration:none;transition:color 0.3s}
-        .nav-link{font-size:13px;font-weight:400;text-decoration:none;letter-spacing:0.01em;transition:opacity 0.25s}
-        .nav-link:hover{opacity:0.5}
-
-        /* ── BOTONES ESTILO iOS ── */
-        /* Efecto "liquid glass" / gota de agua: fondo translúcido, blur, borde sutil, sombra interior */
-        .btn-ios {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 13px 26px;
-          border-radius: 999px;
-          font-size: 14px;
-          font-weight: 400;
-          text-decoration: none;
-          cursor: pointer;
-          white-space: nowrap;
-          border: none;
-          position: relative;
-          overflow: hidden;
-          /* Glass base */
-          background: rgba(255,255,255,0.18);
-          backdrop-filter: blur(20px) saturate(1.8);
-          -webkit-backdrop-filter: blur(20px) saturate(1.8);
-          /* Borde sutil tipo cristal */
-          box-shadow:
-            0 0 0 1px rgba(255,255,255,0.45),
-            inset 0 1px 0 rgba(255,255,255,0.55),
-            inset 0 -1px 0 rgba(0,0,0,0.08),
-            0 4px 16px rgba(0,0,0,0.12);
-          color: white;
-          transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
-        }
-        .btn-ios:hover {
-          background: rgba(255,255,255,0.30);
-          box-shadow:
-            0 0 0 1px rgba(255,255,255,0.6),
-            inset 0 1px 0 rgba(255,255,255,0.7),
-            inset 0 -1px 0 rgba(0,0,0,0.06),
-            0 6px 24px rgba(0,0,0,0.18);
-          transform: translateY(-1px);
-        }
-        .btn-ios:active { transform: translateY(0px) scale(0.98); }
-
-        /* Versión oscura (sobre fondo claro) */
-        .btn-ios-dark {
-          background: rgba(26,26,26,0.07);
-          backdrop-filter: blur(20px) saturate(1.8);
-          -webkit-backdrop-filter: blur(20px) saturate(1.8);
-          box-shadow:
-            0 0 0 1px rgba(26,26,26,0.12),
-            inset 0 1px 0 rgba(255,255,255,0.8),
-            inset 0 -1px 0 rgba(0,0,0,0.05),
-            0 4px 16px rgba(0,0,0,0.06);
-          color: #1a1a1a;
-        }
-        .btn-ios-dark:hover {
-          background: rgba(26,26,26,0.12);
-          box-shadow:
-            0 0 0 1px rgba(26,26,26,0.18),
-            inset 0 1px 0 rgba(255,255,255,0.9),
-            inset 0 -1px 0 rgba(0,0,0,0.04),
-            0 6px 20px rgba(0,0,0,0.1);
-        }
-
-        /* Botones de modal (flechas) */
-        .btn-ios-modal {
-          background: rgba(255,255,255,0.1);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          box-shadow:
-            0 0 0 1px rgba(255,255,255,0.2),
-            inset 0 1px 0 rgba(255,255,255,0.3),
-            0 4px 12px rgba(0,0,0,0.2);
-          color: white;
-          border: none;
-          border-radius: 999px;
-          width: 48px; height: 48px;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 18px;
-          cursor: pointer;
-          transition: background 0.2s, transform 0.15s;
-        }
-        .btn-ios-modal:hover {
-          background: rgba(255,255,255,0.2);
-          transform: scale(1.06);
-        }
-        .btn-ios-modal:active { transform: scale(0.96); }
-
-        /* ── HERO ── */
-        .hero{position:relative;width:100%;height:100vh;overflow:hidden;background:#111}
-        .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.78}
-        .hero-text{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:5.7rem 2.4rem 2.4rem}
-        .hero-h1{font-size:clamp(52px,10.5vw,168px);font-weight:400;line-height:0.93;color:white;letter-spacing:-0.02em;white-space:pre-line;animation:heroFadeIn 0.5s ease forwards}
-        @keyframes heroFadeIn{from{opacity:0}to{opacity:1}}
-        .hero-bottom{display:flex;justify-content:space-between;align-items:flex-end}
-
-        /* ── SECCIONES ── */
-        .section{padding:100px 32px;max-width:1400px;margin:0 auto}
-        .section-label{font-size:11px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:#999;margin-bottom:18px}
-        .section-title{font-size:clamp(36px,5vw,72px);font-weight:400;line-height:1.02;letter-spacing:-0.02em}
-
-        /* ── GRID PROYECTOS — más redondeado ── */
-        .grid-proyectos{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:56px}
-        .p-item{
-          cursor:pointer;overflow:hidden;
-          border-radius:20px; /* más redondeado */
-          background:#e8e4de;
-          transition: box-shadow 0.3s, transform 0.3s;
-        }
-        .p-item:hover {
-          box-shadow: 0 12px 40px rgba(0,0,0,0.13);
-          transform: translateY(-2px);
-        }
-        .p-item:nth-child(1){grid-column:span 7}
-        .p-item:nth-child(2){grid-column:span 5}
-        .p-item:nth-child(3){grid-column:span 5}
-        .p-imgwrap{overflow:hidden;height:280px;display:block;line-height:0;font-size:0}
-        .p-item:nth-child(1) .p-imgwrap{height:360px}
-        .p-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s cubic-bezier(0.16,1,0.3,1);vertical-align:bottom}
-        .p-item:hover .p-img{transform:scale(1.04)}
-        .p-info{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 16px;background:#F9F7F5}
-        .p-nombre{font-size:13px;font-weight:400}
-        .p-meta{font-size:12px;color:#999}
-
-        /* ── NOSOTROS ── */
-        .nosotros-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:56px}
-        .nosotros-body{font-size:18px;font-weight:300;line-height:1.75;color:#444}
-        .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px 32px}
-        .stat-num{font-size:clamp(40px,5vw,64px);font-weight:300;line-height:1;letter-spacing:-0.02em}
-        .stat-label{font-size:12px;color:#999;margin-top:6px;letter-spacing:0.04em}
-
-        .divider{height:1px;background:rgba(26,26,26,0.1);margin:0 32px}
-
-        /* ── CONTACTO ── */
-        .contacto-email{font-size:clamp(24px,4.5vw,60px);font-weight:400;letter-spacing:-0.02em;color:#1a1a1a;text-decoration:none;display:inline-block;border-bottom:1.5px solid rgba(26,26,26,0.25);padding-bottom:3px;transition:border-color 0.3s}
-        .contacto-email:hover{border-color:#1a1a1a}
-        .social-link{font-size:12px;font-weight:400;color:#999;text-decoration:none;letter-spacing:0.12em;text-transform:uppercase;border-bottom:1px solid transparent;padding-bottom:2px;transition:color 0.25s,border-color 0.25s}
-        .social-link:hover{color:#1a1a1a;border-color:#1a1a1a}
-
-        /* ── FOOTER ── */
-        .site-footer{border-top:1px solid rgba(26,26,26,0.1);padding:28px 32px;display:flex;justify-content:space-between;align-items:center}
-        .footer-copy{font-size:12px;color:#aaa}
-        .footer-brand{font-size:12px;letter-spacing:0.18em;color:#bbb;text-transform:uppercase}
-
-        /* ── MODAL ── */
-        .modal-bg{position:fixed;inset:0;background:rgba(8,8,8,0.97);z-index:9998;display:flex;align-items:center;justify-content:center}
-        .modal-bar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:22px 32px;z-index:10}
-        .modal-title{font-size:14px;font-weight:400;color:white;letter-spacing:0.04em}
-        .modal-counter{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px}
-        .modal-close{
-          background: rgba(255,255,255,0.1);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          box-shadow: 0 0 0 1px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
-          border: none;
-          border-radius: 999px;
-          width: 40px; height: 40px;
-          display: flex; align-items: center; justify-content: center;
-          cursor: pointer;
-          color: rgba(255,255,255,0.8);
-          font-size: 18px;
-          transition: background 0.2s, transform 0.15s;
-          z-index: 10;
-        }
-        .modal-close:hover{background:rgba(255,255,255,0.2);transform:scale(1.08)}
-        .modal-close:active{transform:scale(0.94)}
-
-        /* Imagen del modal con bordes redondeados */
-        .modal-img{
-          max-height:80vh;max-width:88vw;object-fit:contain;
-          animation:fadeUp 0.3s ease forwards;
-          position:relative;z-index:5;
-          border-radius: 18px; /* redondeada también la imagen en modal */
-        }
-        @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        .modal-zone{position:absolute;top:0;height:100%;width:50%;z-index:2}
-        .modal-zone-l{left:0;cursor:w-resize}
-        .modal-zone-r{right:0;cursor:e-resize}
-        .modal-arrows{position:absolute;bottom:32px;right:32px;display:flex;gap:10px;z-index:10}
-
-        .wapp-float{position:fixed;bottom:28px;right:28px;z-index:500;transition:transform 0.3s}
-        .wapp-float:hover{transform:scale(1.1)}
-
-        @media(max-width:768px){
-          .site-header{padding:18px 20px}
-          .hero-text{padding:5rem 20px 20px}
-          .section{padding:72px 20px}
-          .divider{margin:0 20px}
-          .nosotros-grid{grid-template-columns:1fr;gap:40px}
-          .grid-proyectos{grid-template-columns:1fr;gap:14px}
-          .p-item:nth-child(n){grid-column:span 1}
-          .p-imgwrap{height:220px !important}
-          .site-footer{padding:24px 20px;flex-direction:column;gap:8px;text-align:center}
-        }
-      `}</style>
-
-      {/* PAJARITO */}
-      {birdVisible && (
-        <img key={Date.now()} src="/PAJARITO1.png" className="bird" style={{ top:`${birdY}vh` }} alt="" />
-      )}
-
-      {/* HEADER */}
-      <header className={`site-header${scrolled ? " scrolled" : ""}`}>
-        <nav style={{ display:"flex", gap:"32px" }}>
-          <a href="#proyectos" className="nav-link" style={{ color: scrolled ? "#1a1a1a" : "white" }}>Proyectos</a>
-          <a href="#nosotros"  className="nav-link" style={{ color: scrolled ? "#1a1a1a" : "white" }}>Nosotros</a>
+      <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
+        <nav className="desktop-nav">
+          <a href="#proyectos">Proyectos</a>
+          <a href="#estudio">Estudio</a>
         </nav>
-        <a href="#" className="header-logo" style={{ color: scrolled ? "#1a1a1a" : "white" }}>GRUPO ANDULKA</a>
-        <a href="#contacto" className="nav-link" style={{ color: scrolled ? "#1a1a1a" : "white" }}>Contacto</a>
+
+        <a className="brand" href="#top">GRUPO ANDULKA</a>
+
+        <a className="desktop-contact" href="#contacto">Contacto</a>
+        <button className="menu-button" onClick={() => setMenuOpen(true)}>Menú</button>
       </header>
 
-      {/* HERO */}
-      <section className="hero">
-        <video autoPlay loop muted playsInline>
-          <source src="/hero.mp4" type="video/mp4" />
-        </video>
-        <div className="hero-text">
-          <div>
-            <h1 className="hero-h1">{line1 || "Creamos\nespacios"}</h1>
+      {menuOpen && (
+        <div className="mobile-menu">
+          <div className="mobile-menu-top">
+            <span>GRUPO ANDULKA</span>
+            <button onClick={() => setMenuOpen(false)}>Cerrar</button>
           </div>
-          <div className="hero-bottom">
-            <h1 className="hero-h1">{line2 || "que\ntransforman"}</h1>
-            {/* Botón iOS glass sobre el video */}
-            <a href="#proyectos" className="btn-ios" style={{ marginBottom:"6px" }}>
-              Ver proyectos ↗
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* PROYECTOS */}
-      <div id="proyectos" className="section">
-        <p className="section-label">Proyectos</p>
-        <h2 className="section-title">Nuestro trabajo</h2>
-        <div className="grid-proyectos">
-          {proyectos.map((p) => (
-            <div key={p.id} className="p-item" onClick={() => { setActive(p.id); setCurrentImg(0); }}>
-              <div className="p-imgwrap">
-                <img src={p.imagenes[0]} className="p-img" alt={p.nombre} />
-              </div>
-              <div className="p-info">
-                <span className="p-nombre">{p.nombre}</span>
-                <span className="p-meta">{p.categoria} · {p.año}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="divider" />
-
-      {/* NOSOTROS — sin "3 Países" */}
-      <div id="nosotros" className="section">
-        <p className="section-label">Estudio</p>
-        <h2 className="section-title">Sobre nosotros</h2>
-        <div className="nosotros-grid">
-          <p className="nosotros-body">
-            Grupo Andulka es un estudio de arquitectura corporativa con sede en Buenos Aires.
-            Desarrollamos proyectos de arquitectura e interiorismo con foco en identidad,
-            funcionalidad y diseño contemporáneo.
-            <br /><br />
-            Creemos que cada espacio tiene el potencial de transformar la forma en que las
-            personas trabajan, crean y se relacionan.
-          </p>
-          <div className="stats-grid">
-            {[["5+","Años de trayectoria"],["10+","Proyectos realizados"],["7","Clientes activos"]].map(([n,l]) => (
-              <div key={l}>
-                <p className="stat-num">{n}</p>
-                <p className="stat-label">{l}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="divider" />
-
-      {/* CONTACTO */}
-      <div id="contacto" className="section">
-        <p className="section-label">Contacto</p>
-        <a href="mailto:info@grupoandulka.com" className="contacto-email">
-          info@grupoandulka.com
-        </a>
-        <div style={{ display:"flex", gap:"16px", marginTop:"48px" }}>
-          {/* Links sociales también como pill iOS oscuro */}
-          <a href="https://instagram.com/grupoandulka/" target="_blank" className="btn-ios btn-ios-dark">
-            Instagram ↗
-          </a>
-          <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" className="btn-ios btn-ios-dark">
-            LinkedIn ↗
-          </a>
-        </div>
-      </div>
-
-      {/* FOOTER */}
-      <footer className="site-footer">
-        <span className="footer-copy">© {new Date().getFullYear()} Grupo Andulka</span>
-        <span className="footer-brand">Arquitectura Corporativa · Buenos Aires</span>
-      </footer>
-
-      {/* MODAL */}
-      {active && proyectoActivo && (
-        <div className="modal-bg" onClick={() => setActive(null)}>
-          <div className="modal-bar" onClick={(e) => e.stopPropagation()}>
-            <div>
-              <p className="modal-title">{proyectoActivo.nombre}</p>
-              <p className="modal-counter">{currentImg + 1} / {proyectoActivo.imagenes.length}</p>
-            </div>
-            <button className="modal-close" onClick={() => setActive(null)}>✕</button>
-          </div>
-          <div className="modal-zone modal-zone-l" onClick={(e) => { e.stopPropagation(); prevImage(); }} />
-          <div className="modal-zone modal-zone-r" onClick={(e) => { e.stopPropagation(); nextImage(); }} />
-          <img key={currentImg} src={proyectoActivo.imagenes[currentImg]} className="modal-img" alt="" onClick={(e) => e.stopPropagation()} />
-          {proyectoActivo.imagenes.length > 1 && (
-            <div className="modal-arrows" onClick={(e) => e.stopPropagation()}>
-              <button className="btn-ios-modal" onClick={prevImage}>←</button>
-              <button className="btn-ios-modal" onClick={nextImage}>→</button>
-            </div>
-          )}
+          <nav>
+            <a href="#proyectos" onClick={() => setMenuOpen(false)}>Proyectos</a>
+            <a href="#estudio" onClick={() => setMenuOpen(false)}>Estudio</a>
+            <a href="#contacto" onClick={() => setMenuOpen(false)}>Contacto</a>
+          </nav>
         </div>
       )}
 
-      {/* WHATSAPP */}
-      <a href="https://wa.me/5491155672356" target="_blank" className="wapp-float">
-        <img src="/WAPP.png" style={{ width:"52px" }} alt="WhatsApp" />
+      <main id="top">
+        <section className="hero">
+          <video autoPlay loop muted playsInline>
+            <source src="/hero.mp4" type="video/mp4" />
+          </video>
+          <div className="hero-shade" />
+          <div className="hero-copy">
+            <p>Arquitectura · Interiorismo · Workplace</p>
+            <h1>Espacios que<br />transforman.</h1>
+            <a href="#proyectos" className="hero-scroll">Ver proyectos ↓</a>
+          </div>
+        </section>
+
+        <section id="proyectos" className="projects">
+          <div className="projects-heading">
+            <p className="eyebrow">Proyectos seleccionados</p>
+            <h2>Arquitectura pensada<br />desde la experiencia.</h2>
+          </div>
+
+          {proyectos.map((p, i) => (
+            <article
+              key={p.id}
+              className={`project-card project-card-${i + 1}`}
+              onClick={() => openProject(p)}
+            >
+              <div className="project-cover">
+                <img src={p.portada} alt={p.nombre} />
+                <div className="project-cover-shade" />
+                <div className="project-overlay">
+                  <div>
+                    <p>{p.categoria}</p>
+                    <h3>{p.nombre}</h3>
+                  </div>
+                  <div className="project-meta">
+                    <span>{p.año}</span>
+                    <span>Ver proyecto ↗</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <section id="estudio" className="studio">
+          <p className="eyebrow">Grupo Andulka</p>
+          <div className="studio-grid">
+            <h2>Diseñamos espacios<br />para nuevas formas<br />de habitar y trabajar.</h2>
+            <div className="studio-copy">
+              <p>
+                Somos un estudio de arquitectura con sede en Buenos Aires.
+                Desarrollamos proyectos de arquitectura e interiorismo con una
+                mirada contemporánea, combinando identidad, funcionalidad y materialidad.
+              </p>
+              <p>
+                Entendemos cada proyecto como una oportunidad para transformar
+                la experiencia cotidiana de quienes lo habitan.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="contacto" className="contact">
+          <p className="eyebrow">Contacto</p>
+          <h2>Hablemos de<br />tu próximo proyecto.</h2>
+          <a className="big-email" href="mailto:info@grupoandulka.com">
+            info@grupoandulka.com ↗
+          </a>
+          <div className="contact-bottom">
+            <div>
+              <a href="https://instagram.com/grupoandulka/" target="_blank" rel="noreferrer">Instagram ↗</a>
+              <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+            </div>
+            <span>Buenos Aires, Argentina</span>
+          </div>
+        </section>
+      </main>
+
+      <a
+        href="https://wa.me/5491155672356"
+        target="_blank"
+        rel="noreferrer"
+        className="whatsapp"
+        aria-label="WhatsApp"
+      >
+        <img src="/WAPP.png" alt="" />
       </a>
     </>
+  );
+}
+
+function GlobalStyles() {
+  return (
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+      :root{--paper:#f3f0eb;--ink:#151515;--line:rgba(21,21,21,.16)}
+      *{box-sizing:border-box;margin:0;padding:0}
+      html{scroll-behavior:smooth}
+      body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+      button,a{font:inherit}
+      button{color:inherit}
+      img{display:block;width:100%}
+      a{color:inherit}
+
+      .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+      .site-header{position:fixed;z-index:1000;top:0;left:0;right:0;height:74px;padding:0 30px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;color:#fff;transition:.35s ease}
+      .site-header.scrolled{height:62px;background:rgba(243,240,235,.92);backdrop-filter:blur(16px);color:var(--ink);border-bottom:1px solid var(--line)}
+      .desktop-nav{display:flex;gap:28px}
+      .desktop-nav a,.desktop-contact,.brand{text-decoration:none;font-size:12px}
+      .brand{font-weight:500;letter-spacing:.22em}
+      .desktop-contact{justify-self:end}
+      .desktop-nav a,.desktop-contact{transition:opacity .2s}
+      .desktop-nav a:hover,.desktop-contact:hover{opacity:.5}
+      .menu-button{display:none;border:0;background:none}
+
+      .hero{height:100svh;min-height:650px;position:relative;overflow:hidden;background:#111}
+      .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+      .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(0,0,0,.05) 45%,rgba(0,0,0,.42))}
+      .hero-copy{position:absolute;inset:0;padding:110px 30px 34px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff}
+      .hero-copy>p{position:absolute;top:105px;left:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+      .hero-copy h1{font-size:clamp(58px,10.8vw,170px);font-weight:300;letter-spacing:-.055em;line-height:.82}
+      .hero-scroll{align-self:flex-end;margin-top:-22px;text-decoration:none;font-size:12px}
+
+      .projects{padding:150px 30px 30px}
+      .projects-heading{display:grid;grid-template-columns:1fr 2fr;margin-bottom:120px}
+      .projects-heading h2{font-size:clamp(42px,6vw,92px);font-weight:300;line-height:.96;letter-spacing:-.045em}
+
+      .project-card{cursor:pointer;margin-bottom:30px}
+      .project-cover{position:relative;overflow:hidden;background:#ddd}
+      .project-card-1 .project-cover{height:88vh;min-height:600px}
+      .project-card-2{width:82%;margin-left:auto;margin-top:130px}
+      .project-card-2 .project-cover{height:82vh;min-height:580px}
+      .project-card-3{width:66%;margin-top:130px}
+      .project-card-3 .project-cover{height:70vh;min-height:520px}
+      .project-cover>img{height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
+      .project-card:hover .project-cover>img{transform:scale(1.025)}
+      .project-cover-shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.48));transition:background .3s}
+      .project-overlay{position:absolute;left:0;right:0;bottom:0;padding:30px;color:white;display:flex;justify-content:space-between;align-items:flex-end}
+      .project-overlay p{font-size:10px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:8px}
+      .project-overlay h3{font-size:clamp(34px,5.2vw,82px);font-weight:300;line-height:.95;letter-spacing:-.045em}
+      .project-meta{display:flex;gap:32px;font-size:11px}
+
+      .studio{padding:190px 30px 180px;border-top:1px solid var(--line);margin-top:170px}
+      .studio-grid{display:grid;grid-template-columns:1.5fr .7fr;gap:10vw;margin-top:70px}
+      .studio h2{font-size:clamp(48px,7.2vw,108px);font-weight:300;line-height:.93;letter-spacing:-.05em}
+      .studio-copy{padding-top:10px;max-width:470px}
+      .studio-copy p{font-size:17px;line-height:1.65;font-weight:300}
+      .studio-copy p+p{margin-top:28px}
+
+      .contact{background:#171717;color:#f4f1ec;padding:120px 30px 34px;min-height:82vh;display:flex;flex-direction:column}
+      .contact h2{font-size:clamp(55px,9vw,140px);font-weight:300;line-height:.88;letter-spacing:-.055em;margin-top:45px}
+      .big-email{font-size:clamp(20px,3.2vw,50px);font-weight:300;text-decoration:none;margin-top:auto;padding:70px 0 30px;border-bottom:1px solid rgba(255,255,255,.25)}
+      .contact-bottom{display:flex;justify-content:space-between;padding-top:26px;font-size:11px}
+      .contact-bottom div{display:flex;gap:22px}
+      .contact-bottom a{text-decoration:none}
+
+      .whatsapp{position:fixed;z-index:800;right:24px;bottom:22px;width:48px;height:48px;transition:transform .25s}
+      .whatsapp:hover{transform:scale(1.08)}
+      .whatsapp img{width:100%;height:100%;object-fit:contain}
+
+      .project-page{background:var(--paper);min-height:100vh}
+      .project-header{height:72px;padding:0 30px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(243,240,235,.93);backdrop-filter:blur(16px);z-index:50}
+      .text-button,.brand-button{border:0;background:none;cursor:pointer;font-size:11px}
+      .brand-button{font-weight:500;letter-spacing:.22em}
+      .project-year{justify-self:end;font-size:11px}
+      .project-intro{padding:100px 30px 75px;display:grid;grid-template-columns:1.5fr .55fr;gap:10vw;align-items:end}
+      .project-intro h1{font-size:clamp(58px,10vw,150px);font-weight:300;line-height:.85;letter-spacing:-.06em;margin-top:24px;max-width:1100px}
+      .project-description{font-size:15px;line-height:1.65;font-weight:300;max-width:420px}
+      .project-hero{height:92vh;min-height:620px;padding:0 30px}
+      .project-hero img{height:100%;object-fit:cover}
+      .project-gallery{padding:30px}
+      .gallery-wide{margin:0 0 30px}
+      .gallery-wide img{width:100%;max-height:92vh;object-fit:cover}
+      .gallery-wide.inset{width:74%;margin:140px auto}
+      .gallery-pair{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:140px 0}
+      .gallery-pair figure{height:72vh}
+      .gallery-pair img{height:100%;object-fit:cover}
+      .next-project{padding:180px 30px 30px;border-top:1px solid var(--line);cursor:pointer}
+      .next-row{display:flex;justify-content:space-between;align-items:flex-end;margin:35px 0 70px}
+      .next-row h2{font-size:clamp(54px,9vw,135px);font-weight:300;line-height:.9;letter-spacing:-.055em}
+      .next-row span{font-size:40px;font-weight:300}
+      .next-image{height:65vh;overflow:hidden}
+      .next-image img{height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.16,1,.3,1)}
+      .next-project:hover .next-image img{transform:scale(1.02)}
+      .minimal-footer{display:flex;justify-content:space-between;padding:28px 30px;font-size:10px;border-top:1px solid var(--line);margin-top:30px}
+
+      .mobile-menu{position:fixed;inset:0;background:var(--paper);z-index:2000;padding:22px 20px;display:flex;flex-direction:column}
+      .mobile-menu-top{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.14em}
+      .mobile-menu-top button{border:0;background:none}
+      .mobile-menu nav{margin-top:auto;margin-bottom:50px;display:flex;flex-direction:column}
+      .mobile-menu nav a{font-size:14vw;line-height:1.05;letter-spacing:-.05em;text-decoration:none;font-weight:300}
+
+      @media(max-width:768px){
+        .site-header{height:60px;padding:0 18px;display:flex;justify-content:space-between}
+        .desktop-nav,.desktop-contact{display:none}
+        .menu-button{display:block;color:inherit}
+        .brand{font-size:10px}
+        .hero{min-height:620px}
+        .hero-copy{padding:90px 18px 22px}
+        .hero-copy>p{top:88px;left:18px}
+        .hero-copy h1{font-size:17vw;line-height:.86}
+        .hero-scroll{margin-top:35px;align-self:flex-start}
+        .projects{padding:95px 18px 18px}
+        .projects-heading{display:block;margin-bottom:65px}
+        .projects-heading h2{font-size:11vw;margin-top:25px}
+        .project-card,.project-card-2,.project-card-3{width:100%;margin:0 0 18px}
+        .project-card-1 .project-cover,.project-card-2 .project-cover,.project-card-3 .project-cover{height:72svh;min-height:520px}
+        .project-overlay{padding:18px;display:block}
+        .project-overlay h3{font-size:10vw}
+        .project-meta{justify-content:space-between;margin-top:16px}
+        .studio{padding:110px 18px 100px;margin-top:90px}
+        .studio-grid{display:block;margin-top:42px}
+        .studio h2{font-size:12vw}
+        .studio-copy{margin-top:55px}
+        .contact{padding:90px 18px 24px;min-height:78svh}
+        .contact h2{font-size:14vw}
+        .big-email{font-size:5vw}
+        .contact-bottom{gap:25px;flex-direction:column}
+        .project-header{height:60px;padding:0 18px}
+        .brand-button{font-size:9px}
+        .project-intro{padding:70px 18px 45px;display:block}
+        .project-intro h1{font-size:15vw}
+        .project-description{margin-top:45px}
+        .project-hero{height:72svh;min-height:500px;padding:0 18px}
+        .project-gallery{padding:18px}
+        .gallery-wide{margin-bottom:18px}
+        .gallery-wide.inset{width:100%;margin:70px 0}
+        .gallery-pair{grid-template-columns:1fr;gap:18px;margin:70px 0}
+        .gallery-pair figure{height:62svh}
+        .next-project{padding:100px 18px 18px}
+        .next-row{margin:25px 0 45px}
+        .next-row h2{font-size:13vw}
+        .next-image{height:55svh}
+        .minimal-footer{padding:24px 18px}
+        .whatsapp{right:16px;bottom:16px;width:44px;height:44px}
+      }
+    `}</style>
   );
 }
