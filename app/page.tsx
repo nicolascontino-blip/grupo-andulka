@@ -194,6 +194,14 @@ export default function AndulkaSite() {
     const index = proyectos.findIndex((p) => p.id === active.id);
     const next = proyectos[(index + 1) % proyectos.length];
 
+    const goToNextProject = () => {
+      setActive(next);
+      window.scrollTo({ top: 0, behavior: "auto" });
+      window.requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      });
+    };
+
     return (
       <>
         <GlobalStyles />
@@ -238,7 +246,7 @@ export default function AndulkaSite() {
             ))}
           </section>
 
-          <section className="next-project" onClick={() => setActive(next)}>
+          <section className="next-project" onClick={goToNextProject}>
             <p className="eyebrow">Siguiente proyecto</p>
             <div className="next-row">
               <h2>{next.nombre}</h2>
