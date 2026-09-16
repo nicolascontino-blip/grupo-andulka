@@ -10,6 +10,7 @@ type Proyecto = {
   portada: string;
   imagenes: string[];
   descripcion: string;
+  video?: string;
 };
 
 const proyectos: Proyecto[] = [
@@ -19,7 +20,10 @@ const proyectos: Proyecto[] = [
     categoria: "Arquitectura Corporativa",
     año: "2025",
     portada: "/valo1.jpg",
-    imagenes: ["/valo1.jpg", "/valo2.jpg", "/valo3.jpg", "/valo4.jpg", "/valo5.jpg"],
+    imagenes: [
+      "/valo1.jpg", "/valo2.jpg", "/valo3.jpg", "/valo4.jpg", "/valo5.jpg",
+      "/valo6.jpg", "/valo7.jpg", "/valo8.jpg", "/valo9.jpg",
+    ],
     descripcion:
       "Arquitectura e interiorismo corporativo concebidos como una experiencia integral de trabajo, identidad y encuentro.",
   },
@@ -30,26 +34,35 @@ const proyectos: Proyecto[] = [
     año: "2022",
     portada: "/ceballos1.jpg",
     imagenes: [
-      "/ceballos1.jpg",
-      "/ceballos2.jpg",
-      "/ceballos3.jpg",
-      "/ceballos4.jpg",
-      "/ceballos5.jpg",
-      // Cuando subamos el resto del material a /public/ceballos/,
-      // agregamos aquí las nuevas imágenes del mismo proyecto.
+      "/ceballos1.jpg", "/ceballos2.jpg", "/ceballos3.jpg", "/ceballos4.jpg", "/ceballos5.jpg",
+      "/ceballos6.jpeg", "/ceballos7.jpeg", "/ceballos8.jpeg", "/ceballos9.jpeg",
     ],
     descripcion:
       "Una oficina donde madera, vidrio, iluminación y piezas de arte construyen una atmósfera cálida, sobria y contemporánea.",
   },
   {
     id: 3,
-    nombre: "PROYECTO 3",
-    categoria: "Diseño de Espacios",
+    nombre: "LA EUROPEA",
+    categoria: "Arquitectura Corporativa",
     año: "2022",
-    portada: "/proyecto3.jpg",
-    imagenes: ["/proyecto3.jpg"],
+    portada: "/europea6.jpg",
+    imagenes: [
+      "/europea6.jpg", "/europea1.jpg", "/europea2.jpg",
+      "/europea3.png", "/europea4.jpg", "/europea5.jpg",
+    ],
     descripcion:
-      "Diseño interior enfocado en materialidad, proporción y una lectura clara del espacio.",
+      "Proyecto de interiorismo corporativo que articula espacios de trabajo, encuentro y exhibición a través del color, la materialidad y el diseño de equipamiento.",
+    video: "/europea-video.mp4",
+  },
+  {
+    id: 4,
+    nombre: "SS SERVICIOS",
+    categoria: "Arquitectura Corporativa",
+    año: "",
+    portada: "/ssservicios1.png",
+    imagenes: ["/ssservicios1.png", "/ssservicios2.png"],
+    descripcion:
+      "Proyecto de arquitectura e interiorismo corporativo desarrollado a partir de una imagen contemporánea, funcional y coherente con la identidad de la empresa.",
   },
 ];
 
@@ -143,6 +156,14 @@ export default function AndulkaSite() {
           <section className="project-hero">
             <img src={active.portada} alt={active.nombre} />
           </section>
+
+          {active.video && (
+            <section className="project-video">
+              <video autoPlay loop muted playsInline controls>
+                <source src={active.video} type="video/mp4" />
+              </video>
+            </section>
+          )}
 
           <section className="project-gallery">
             {active.imagenes.slice(1).map((src, i) => {
@@ -387,6 +408,8 @@ function GlobalStyles() {
       .project-description{font-size:15px;line-height:1.65;font-weight:300;max-width:420px}
       .project-hero{height:92vh;min-height:620px;padding:0 30px}
       .project-hero img{height:100%;object-fit:cover}
+      .project-video{padding:30px 30px 0}
+      .project-video video{display:block;width:100%;max-height:92vh;object-fit:cover;background:#111}
       .project-gallery{padding:30px}
       .gallery-wide{margin:0 0 30px}
       .gallery-wide img{width:100%;max-height:92vh;object-fit:cover}
@@ -441,6 +464,8 @@ function GlobalStyles() {
         .project-intro h1{font-size:15vw}
         .project-description{margin-top:45px}
         .project-hero{height:72svh;min-height:500px;padding:0 18px}
+        .project-video{padding:18px 18px 0}
+        .project-video video{max-height:72svh}
         .project-gallery{padding:18px}
         .gallery-wide{margin-bottom:18px}
         .gallery-wide.inset{width:100%;margin:70px 0}
