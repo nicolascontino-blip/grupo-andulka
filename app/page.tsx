@@ -85,7 +85,7 @@ export default function AndulkaSite() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = active || menuOpen ? "hidden" : "";
+    document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -166,26 +166,14 @@ export default function AndulkaSite() {
           )}
 
           <section className="project-gallery">
-            {active.imagenes.slice(1).map((src, i) => {
-              const mode = i % 5;
-              if (mode === 1 && active.imagenes[i + 2]) {
-                return null;
-              }
-              if (mode === 2) {
-                const prev = active.imagenes[i];
-                return (
-                  <div className="gallery-pair" key={`${src}-${i}`}>
-                    <figure><img src={prev} alt="" loading="lazy" /></figure>
-                    <figure><img src={src} alt="" loading="lazy" /></figure>
-                  </div>
-                );
-              }
-              return (
-                <figure className={mode === 3 ? "gallery-wide inset" : "gallery-wide"} key={`${src}-${i}`}>
-                  <img src={src} alt="" loading="lazy" />
-                </figure>
-              );
-            })}
+            {active.imagenes.slice(1).map((src, i) => (
+              <figure
+                className={i % 3 === 1 ? "gallery-wide inset" : "gallery-wide"}
+                key={`${src}-${i}`}
+              >
+                <img src={src} alt={`${active.nombre} — imagen ${i + 2}`} loading="lazy" />
+              </figure>
+            ))}
           </section>
 
           <section className="next-project" onClick={() => setActive(next)}>
@@ -272,7 +260,7 @@ export default function AndulkaSite() {
                     <h3>{p.nombre}</h3>
                   </div>
                   <div className="project-meta">
-                    <span>{p.año}</span>
+                    {p.año && <span>{p.año}</span>}
                     <span>Ver proyecto ↗</span>
                   </div>
                 </div>
@@ -372,6 +360,8 @@ function GlobalStyles() {
       .project-card-2 .project-cover{height:82vh;min-height:580px}
       .project-card-3{width:66%;margin-top:130px}
       .project-card-3 .project-cover{height:70vh;min-height:520px}
+      .project-card-4{width:82%;margin-left:auto;margin-top:130px}
+      .project-card-4 .project-cover{height:78vh;min-height:560px}
       .project-cover>img{height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
       .project-card:hover .project-cover>img{transform:scale(1.025)}
       .project-cover-shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.48));transition:background .3s}
@@ -445,8 +435,8 @@ function GlobalStyles() {
         .projects{padding:95px 18px 18px}
         .projects-heading{display:block;margin-bottom:65px}
         .projects-heading h2{font-size:11vw;margin-top:25px}
-        .project-card,.project-card-2,.project-card-3{width:100%;margin:0 0 18px}
-        .project-card-1 .project-cover,.project-card-2 .project-cover,.project-card-3 .project-cover{height:72svh;min-height:520px}
+        .project-card,.project-card-2,.project-card-3,.project-card-4{width:100%;margin:0 0 18px}
+        .project-card-1 .project-cover,.project-card-2 .project-cover,.project-card-3 .project-cover,.project-card-4 .project-cover{height:72svh;min-height:520px}
         .project-overlay{padding:18px;display:block}
         .project-overlay h3{font-size:10vw}
         .project-meta{justify-content:space-between;margin-top:16px}
