@@ -76,7 +76,11 @@ export default function AndulkaSite() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<Proyecto | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [workplacesText, setWorkplacesText] = useState("WORKPLACES");
+  const [heroWords, setHeroWords] = useState({
+    arquitectura: "ARQUITECTURA",
+    interiorismo: "INTERIORISMO",
+    workplaces: "WORKPLACES",
+  });
   const touchStart = useRef<number | null>(null);
 
   useEffect(() => {
@@ -85,35 +89,51 @@ export default function AndulkaSite() {
   }, []);
 
   useEffect(() => {
-    const target = "WORKPLACES";
+    const targets = {
+      arquitectura: "ARQUITECTURA",
+      interiorismo: "INTERIORISMO",
+      workplaces: "WORKPLACES",
+    };
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let step = 0;
+    let frame = 0;
     let timeoutId: number;
 
-    const animate = () => {
-      const fixed = Math.floor(step / 3);
-      const text = target
+    const scramble = (target: string, fixed: number) =>
+      target
         .split("")
         .map((letter, index) =>
           index < fixed ? letter : chars[Math.floor(Math.random() * chars.length)]
         )
         .join("");
 
-      setWorkplacesText(text);
-      step += 1;
+    const animate = () => {
+      const fixed = Math.floor(frame / 3);
 
-      if (fixed <= target.length) {
+      setHeroWords({
+        arquitectura: scramble(targets.arquitectura, fixed),
+        interiorismo: scramble(targets.interiorismo, fixed),
+        workplaces: scramble(targets.workplaces, fixed),
+      });
+
+      frame += 1;
+      const longest = Math.max(
+        targets.arquitectura.length,
+        targets.interiorismo.length,
+        targets.workplaces.length
+      );
+
+      if (fixed <= longest) {
         timeoutId = window.setTimeout(animate, 48);
       } else {
-        setWorkplacesText(target);
+        setHeroWords(targets);
         timeoutId = window.setTimeout(() => {
-          step = 0;
+          frame = 0;
           animate();
         }, 4200);
       }
     };
 
-    timeoutId = window.setTimeout(animate, 700);
+    timeoutId = window.setTimeout(animate, 650);
     return () => window.clearTimeout(timeoutId);
   }, []);
 
@@ -210,7 +230,7 @@ export default function AndulkaSite() {
           <section className="project-gallery">
             {active.imagenes.slice(1).map((src, i) => (
               <figure
-                className={`${i % 3 === 1 ? "gallery-wide inset" : "gallery-wide"} ${i % 2 === 0 ? "drift-left" : "drift-right"}`}
+                className={`${i % 3 === 1 ? "gallery-wide inset" : "gallery-wide"} motion-${(i % 6) + 1}`}
                 key={`${src}-${i}`}
               >
                 <img src={src} alt={`${active.nombre} — imagen ${i + 2}`} loading="lazy" />
@@ -275,7 +295,13 @@ export default function AndulkaSite() {
           </video>
           <div className="hero-shade" />
           <div className="hero-copy">
-            <p>Arquitectura · Interiorismo · <span className="scramble-word">{workplacesText}</span></p>
+            <p className="hero-disciplines">
+              <span>{heroWords.arquitectura}</span>
+              <b>·</b>
+              <span>{heroWords.interiorismo}</span>
+              <b>·</b>
+              <span>{heroWords.workplaces}</span>
+            </p>
             <h1>Espacios que<br />transforman.</h1>
             <a href="#proyectos" className="hero-scroll">Ver proyectos ↓</a>
           </div>
@@ -388,7 +414,9 @@ function GlobalStyles() {
       .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.16),rgba(0,0,0,.05) 45%,rgba(0,0,0,.42))}
       .hero-copy{position:absolute;inset:0;padding:110px 30px 34px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff}
       .hero-copy>p{position:absolute;top:105px;left:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-      .scramble-word{display:inline-block;min-width:82px;letter-spacing:.12em}
+      .hero-disciplines{display:flex;align-items:center;gap:9px;white-space:nowrap}
+      .hero-disciplines span{display:inline-block;min-width:max-content;letter-spacing:.12em}
+      .hero-disciplines b{font-weight:300;opacity:.65}
       .hero-copy h1{font-size:clamp(58px,10.8vw,170px);font-weight:300;letter-spacing:-.055em;line-height:.82}
       .hero-scroll{align-self:flex-end;margin-top:-22px;text-decoration:none;font-size:12px}
 
@@ -398,6 +426,10 @@ function GlobalStyles() {
 
       .project-card{cursor:pointer;margin-bottom:30px}
       .project-cover{position:relative;overflow:hidden;background:#ddd}
+      .project-cover,.project-hero img,.project-video video,.gallery-wide img,.next-image,.next-image img{border-radius:22px}
+      .project-cover{transform:translateZ(0)}
+      .project-hero img,.gallery-wide img,.next-image img{overflow:hidden}
+
       .project-card-1 .project-cover{height:88vh;min-height:600px}
       .project-card-2{width:82%;margin-left:auto;margin-top:130px}
       .project-card-2 .project-cover{height:82vh;min-height:580px}
@@ -441,16 +473,28 @@ function GlobalStyles() {
       .project-description-wrap{max-width:420px}
       .project-description{font-size:15px;line-height:1.65;font-weight:300}
       .project-facts{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-      .project-hero{height:92vh;min-height:620px;padding:0 30px}
+      .project-hero{height:92vh;min-height:620px;padding:0 30px;scroll-snap-align:center}
       .project-hero img{height:100%;object-fit:cover}
-      .project-video{padding:30px 30px 0}
+      .project-video{padding:30px 30px 0;scroll-snap-align:center}
       .project-video video{display:block;width:100%;max-height:92vh;object-fit:cover;background:#111}
-      .project-gallery{padding:30px}
-      .gallery-wide{margin:0 0 30px;will-change:transform}
-      @keyframes driftLeft{from{transform:translateX(4.5vw)}to{transform:translateX(-4.5vw)}}
-      @keyframes driftRight{from{transform:translateX(-4.5vw)}to{transform:translateX(4.5vw)}}
-      .drift-left{animation:driftLeft linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
-      .drift-right{animation:driftRight linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
+      .project-gallery{padding:30px;scroll-snap-type:y proximity}
+      .gallery-wide{margin:0 0 30px;will-change:transform;scroll-snap-align:center;scroll-snap-stop:normal}
+      @keyframes motion1{from{transform:translate3d(5vw,2vh,0) rotate(.35deg)}to{transform:translate3d(-4vw,-2vh,0) rotate(-.25deg)}}
+      @keyframes motion2{from{transform:translate3d(-3vw,4vh,0) scale(.985)}to{transform:translate3d(4vw,-1vh,0) scale(1)}}
+      @keyframes motion3{from{transform:translate3d(1vw,5vh,0)}to{transform:translate3d(-2vw,-4vh,0)}}
+      @keyframes motion4{from{transform:translate3d(-5vw,1vh,0) rotate(-.3deg)}to{transform:translate3d(2vw,-3vh,0) rotate(.2deg)}}
+      @keyframes motion5{from{transform:translate3d(3vw,3vh,0) scale(.99)}to{transform:translate3d(-1vw,-2vh,0) scale(1.01)}}
+      @keyframes motion6{from{transform:translate3d(-1vw,4vh,0)}to{transform:translate3d(3vw,-4vh,0)}}
+      .motion-1{animation:motion1 linear both}
+      .motion-2{animation:motion2 linear both}
+      .motion-3{animation:motion3 linear both}
+      .motion-4{animation:motion4 linear both}
+      .motion-5{animation:motion5 linear both}
+      .motion-6{animation:motion6 linear both}
+      .motion-1,.motion-2,.motion-3,.motion-4,.motion-5,.motion-6{
+        animation-timeline:view();
+        animation-range:entry 0% exit 100%;
+      }
       .gallery-wide img{width:100%;max-height:92vh;object-fit:cover}
       .gallery-wide.inset{width:74%;margin:140px auto}
       .gallery-pair{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:140px 0}
@@ -470,6 +514,10 @@ function GlobalStyles() {
       .mobile-menu-top button{border:0;background:none}
       .mobile-menu nav{margin-top:auto;margin-bottom:50px;display:flex;flex-direction:column}
       .mobile-menu nav a{font-size:14vw;line-height:1.05;letter-spacing:-.05em;text-decoration:none;font-weight:300}
+
+      @media (prefers-reduced-motion: reduce){
+        .motion-1,.motion-2,.motion-3,.motion-4,.motion-5,.motion-6{animation:none!important;transform:none!important}
+      }
 
       @media(max-width:768px){
         .site-header{height:60px;padding:0 18px;display:flex;justify-content:space-between}
@@ -507,7 +555,9 @@ function GlobalStyles() {
         .project-video video{max-height:72svh}
         .project-gallery{padding:18px}
         .gallery-wide{margin-bottom:18px}
-        .drift-left,.drift-right{animation-range:entry 15% exit 85%}
+        .motion-1,.motion-2,.motion-3,.motion-4,.motion-5,.motion-6{animation-range:entry 15% exit 85%}
+        .project-cover,.project-hero img,.project-video video,.gallery-wide img,.next-image,.next-image img{border-radius:14px}
+        .hero-disciplines{gap:5px;font-size:9px;letter-spacing:.08em}
         .gallery-wide.inset{width:100%;margin:70px 0}
         .gallery-pair{grid-template-columns:1fr;gap:18px;margin:70px 0}
         .gallery-pair figure{height:62svh}
