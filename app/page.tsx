@@ -367,16 +367,15 @@ export default function AndulkaSite() {
         </section>
 
         <section id="contacto" className="contact editorial-footer">
-          <div className="footer-actions">
-            <a href="mailto:info@grupoandulka.com" className="footer-action"><span>Hablemos</span><span className="footer-arrow">↗</span></a>
-            <a href="mailto:info@grupoandulka.com?subject=Portfolio%20%2F%20Grupo%20Andulka" className="footer-action"><span>Sumate al equipo</span><span className="footer-arrow">↗</span></a>
+          <div className="footer-actions footer-actions-single">
+            <a href="mailto:info@grupoandulka.com" className="footer-action"><span>Hablemos de tu próximo proyecto</span><span className="footer-arrow">↗</span></a>
           </div>
           <div className="footer-info">
             <div className="footer-identity"><strong>Grupo Andulka</strong><span>Arquitectura · Interiorismo · Workplaces</span><span>Buenos Aires, Argentina</span></div>
             <nav className="footer-nav"><a href="#proyectos">Proyectos</a><a href="#estudio">Estudio</a><a className="neon-mail" href="mailto:info@grupoandulka.com">info@grupoandulka.com</a></nav>
             <div className="footer-socials"><a className="neon-social neon-instagram" href="https://instagram.com/grupoandulka/" target="_blank" rel="noreferrer">Instagram ↗</a><a className="neon-social neon-linkedin" href="https://linkedin.com/company/grupo-andulka/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
           </div>
-          <div className="footer-wordmark">GRUPO ANDULKA</div>
+          <div className="footer-wordmark" aria-label="GRUPO ANDULKA"><span>GRUPO ANDULKA</span></div>
           <div className="footer-legal"><span>© {new Date().getFullYear()} Grupo Andulka. Todos los derechos reservados.</span><span>Designed by <strong>CONTI</strong></span></div>
         </section>
       </main>
@@ -780,6 +779,14 @@ function GlobalStyles() {
       .footer-legal{border-top:1px solid rgba(21,21,21,.25);padding-top:12px;display:flex;justify-content:space-between;gap:30px;font-size:10px;color:rgba(21,21,21,.48)}.footer-legal strong{font-weight:500;color:var(--ink);letter-spacing:.08em}
       .editorial-footer a.neon-mail{font-size:12px!important;line-height:1.55!important;letter-spacing:0!important;width:auto!important}.editorial-footer .footer-socials a.neon-social{font-size:12px!important;line-height:1.55!important}
       @media(max-width:768px){.editorial-footer{padding:14px 14px 12px}.footer-actions{grid-template-columns:1fr;border-radius:20px}.footer-action{min-height:92px;padding:0 22px;font-size:27px}.footer-action:first-child{border-right:0;border-bottom:1px solid rgba(21,21,21,.55)}.footer-action:hover{padding-left:22px}.footer-info{min-height:0;padding:38px 2px 32px;grid-template-columns:1fr 1fr;gap:34px 22px}.footer-identity{grid-column:1/-1}.footer-socials{align-items:flex-end}.footer-wordmark{font-size:16.8vw;line-height:.82;padding:22px 0 26px}.footer-legal{font-size:9px;line-height:1.4;align-items:flex-end}.footer-legal span:first-child{max-width:58%}.editorial-footer a.neon-mail,.editorial-footer .footer-socials a.neon-social{font-size:11px!important}}
+
+      /* Footer final: CTA único + wordmark 3D tipo globo */
+      .footer-actions-single{grid-template-columns:1fr}
+      .footer-actions-single .footer-action:first-child{border-right:0}
+      .footer-wordmark{overflow:visible;perspective:900px;padding:38px 0 48px;text-align:center}
+      .footer-wordmark span{display:inline-block;white-space:nowrap;font-weight:700;letter-spacing:-.085em;color:#7d1830;transform:perspective(900px) rotateX(8deg);text-shadow:0 2px 0 #9c3450,0 5px 0 #6f1028,0 10px 14px rgba(74,8,28,.34),0 24px 34px rgba(38,5,16,.24),inset 0 2px 2px rgba(255,255,255,.7);filter:drop-shadow(0 18px 20px rgba(65,9,27,.20));-webkit-text-stroke:1px rgba(90,10,32,.22)}
+      @supports ((-webkit-background-clip:text) or (background-clip:text)){.footer-wordmark span{background:linear-gradient(180deg,#f3a5b7 0%,#c34a69 18%,#8f1e3b 48%,#641128 72%,#a93252 100%);-webkit-background-clip:text;background-clip:text;color:transparent}}
+      @media(max-width:768px){.footer-actions-single .footer-action:first-child{border-bottom:0}.footer-actions-single .footer-action{font-size:clamp(23px,7vw,30px)}.footer-wordmark{padding:28px 0 34px}.footer-wordmark span{transform:perspective(700px) rotateX(7deg);text-shadow:0 1px 0 #9c3450,0 3px 0 #6f1028,0 7px 11px rgba(74,8,28,.30),0 16px 24px rgba(38,5,16,.20)}}
     `}</style>
   );
 }
