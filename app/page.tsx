@@ -408,18 +408,48 @@ function GlobalStyles() {
       button{color:inherit}
       img{display:block;width:100%}
       a{color:inherit}
-      /* Liquid Glass + LED giratorio SOLO EN EL BORDE */
-      .led-glass{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 28px rgba(0,0,0,.08);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);text-decoration:none;overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1)}
-      .led-glass::before{content:"";position:absolute;z-index:-2;left:50%;top:50%;width:240%;aspect-ratio:1;transform:translate(-50%,-50%) rotate(0deg);background:conic-gradient(#00f5ff,#665cff,#ff2bd6,#ff4f91,#eaff00,#00ff91,#00f5ff);opacity:0;pointer-events:none}
-      .led-glass::after{content:"";position:absolute;z-index:-1;inset:2px;border-radius:999px;background:rgba(20,20,20,.36);box-shadow:inset 0 1px 0 rgba(255,255,255,.18);pointer-events:none}
+      /* Liquid Glass: interior limpio + LED giratorio exclusivamente en el borde */
+      .led-glass{
+        position:relative;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        min-height:36px;
+        padding:8px 16px;
+        border-radius:999px;
+        border:1px solid rgba(255,255,255,.24);
+        background:rgba(255,255,255,.10);
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 28px rgba(0,0,0,.08);
+        backdrop-filter:blur(18px) saturate(150%);
+        -webkit-backdrop-filter:blur(18px) saturate(150%);
+        text-decoration:none;
+        transition:transform .22s cubic-bezier(.16,1,.3,1);
+      }
+      .led-glass::before{
+        content:"";
+        position:absolute;
+        inset:-1px;
+        border-radius:inherit;
+        padding:2px;
+        background:conic-gradient(from var(--andulka-angle),#00f5ff,#665cff,#ff2bd6,#ff4f91,#eaff00,#00ff91,#00f5ff);
+        -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+        -webkit-mask-composite:xor;
+        mask-composite:exclude;
+        pointer-events:none;
+        opacity:0;
+      }
+      .led-glass::after{display:none!important}
+      .led-glass:hover::before,.led-glass:focus-visible::before,.led-glass:active::before{
+        opacity:1;
+        animation:andulkaBorderSpin 1.25s linear infinite;
+      }
       .led-glass:hover{transform:translateY(-1px)}
-      .led-glass:hover::before,.led-glass:focus-visible::before,.led-glass:active::before{opacity:1;animation:andulkaLedSpin 1.35s linear infinite}
       .led-glass:active{transform:scale(.97)}
-      @keyframes andulkaLedSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-      .led-glass-light{color:var(--ink);background:rgba(243,240,235,.30);border-color:rgba(21,21,21,.12);cursor:pointer}
-      .led-glass-light::after{background:rgba(243,240,235,.92)}
-      .led-glass-hero{padding:10px 18px;color:#fff}
-      .led-glass-project{min-height:32px;padding:7px 14px;color:#fff;gap:9px}
+      @property --andulka-angle{syntax:"<angle>";initial-value:0deg;inherits:false}
+      @keyframes andulkaBorderSpin{to{--andulka-angle:360deg}}
+      .led-glass-light{color:var(--ink);background:rgba(243,240,235,.82);border-color:rgba(21,21,21,.12);cursor:pointer}
+      .led-glass-hero{padding:10px 18px;color:#fff;background:rgba(15,15,15,.22)}
+      .led-glass-project{min-height:32px;padding:7px 14px;color:#fff;background:rgba(15,15,15,.22);gap:9px}
       .project-bird{width:18px!important;height:18px!important;object-fit:contain!important;flex:0 0 18px;filter:none}
 
       /* Borde LED continuo en portadas */
@@ -511,47 +541,26 @@ function GlobalStyles() {
       .project-video{padding:30px 30px 0;scroll-snap-align:center}
       .project-video video{display:block;width:100%;max-height:92vh;object-fit:cover;background:#111}
       .project-gallery{padding:30px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px;align-items:start;scroll-snap-type:y proximity}
-      .gallery-wide{width:100%;margin:0;will-change:transform;scroll-snap-align:center;scroll-snap-stop:normal}
+      .gallery-wide{width:100%;margin:0;will-change:transform;scroll-snap-align:center;scroll-snap-stop:normal;border-radius:22px;overflow:hidden}
       @keyframes motion1{from{transform:translate3d(5vw,2vh,0) rotate(.35deg)}to{transform:translate3d(-4vw,-2vh,0) rotate(-.25deg)}}
       @keyframes motion2{from{transform:translate3d(-3vw,4vh,0) scale(.985)}to{transform:translate3d(4vw,-1vh,0) scale(1)}}
       @keyframes motion3{from{transform:translate3d(1vw,5vh,0)}to{transform:translate3d(-2vw,-4vh,0)}}
       @keyframes motion4{from{transform:translate3d(-5vw,1vh,0) rotate(-.3deg)}to{transform:translate3d(2vw,-3vh,0) rotate(.2deg)}}
       @keyframes motion5{from{transform:translate3d(3vw,3vh,0) scale(.99)}to{transform:translate3d(-1vw,-2vh,0) scale(1.01)}}
       @keyframes motion6{from{transform:translate3d(-1vw,4vh,0)}to{transform:translate3d(3vw,-4vh,0)}}
-      .motion-1{animation:motion1 linear both}
-      .motion-2{animation:motion2 linear both}
-      .motion-3{animation:motion3 linear both}
-      .motion-4{animation:motion4 linear both}
-      .motion-5{animation:motion5 linear both}
-      .motion-6{animation:motion6 linear both}
-      .motion-1,.motion-2,.motion-3,.motion-4,.motion-5,.motion-6{
-        animation-timeline:view();
-        animation-range:entry 0% exit 100%;
-      }
-      .gallery-wide img{width:100%;height:auto;max-height:88vh;object-fit:contain}
-      .gallery-wide.inset{width:100%;margin:0}
-      .gallery-pair{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:140px 0}
-      .gallery-pair figure{height:72vh}
-      .gallery-pair img{height:100%;object-fit:cover}
-      .next-project{padding:180px 30px 30px;border-top:1px solid var(--line);cursor:pointer}
-      .next-row{display:flex;justify-content:space-between;align-items:flex-end;margin:35px 0 70px}
-      .next-row h2{font-size:clamp(54px,9vw,135px);font-weight:300;line-height:.9;letter-spacing:-.055em}
-      .next-row span{font-size:40px;font-weight:300}
-      .next-image{height:65vh;overflow:hidden}
-      .next-image img{height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.16,1,.3,1)}
-      .next-project:hover .next-image img{transform:scale(1.02)}
-      .minimal-footer{display:flex;justify-content:space-between;padding:28px 30px;font-size:10px;border-top:1px solid var(--line);margin-top:30px}
-
-      .mobile-menu{position:fixed;inset:0;background:var(--paper);z-index:2000;padding:22px 20px;display:flex;flex-direction:column}
-      .mobile-menu-top{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.14em}
-      .mobile-menu-top button{border:0;background:none}
-      .mobile-menu nav{margin-top:auto;margin-bottom:50px;display:flex;flex-direction:column}
-      .mobile-menu nav a{font-size:14vw;line-height:1.05;letter-spacing:-.05em;text-decoration:none;font-weight:300}
-
-      @media (prefers-reduced-motion: reduce){
-        .motion-1,.motion-2,.motion-3,.motion-4,.motion-5,.motion-6{animation:none!important;transform:none!important}
-        .led-glass:hover::before{animation:none!important}
-      }
+      /* Movimiento editorial variado: cada foto transforma distinto */
+      .motion-1{animation:floatUp 8.5s ease-in-out infinite alternate}
+      .motion-2{animation:floatRight 10s ease-in-out infinite alternate}
+      .motion-3{animation:floatDown 9s ease-in-out infinite alternate}
+      .motion-4{animation:floatLeft 10.5s ease-in-out infinite alternate}
+      .motion-5{animation:floatZoomUp 11s ease-in-out infinite alternate}
+      .motion-6{animation:floatDiagonal 9.5s ease-in-out infinite alternate}
+      @keyframes floatUp{from{transform:translate3d(0,18px,0) scale(.985)}to{transform:translate3d(0,-18px,0) scale(1.015)}}
+      @keyframes floatRight{from{transform:translate3d(-16px,0,0) scale(1)}to{transform:translate3d(16px,-8px,0) scale(1.012)}}
+      @keyframes floatDown{from{transform:translate3d(0,-18px,0) scale(1.012)}to{transform:translate3d(0,18px,0) scale(.99)}}
+      @keyframes floatLeft{from{transform:translate3d(18px,8px,0) scale(.99)}to{transform:translate3d(-18px,-6px,0) scale(1.012)}}
+      @keyframes floatZoomUp{from{transform:translate3d(0,14px,0) scale(.975)}to{transform:translate3d(8px,-16px,0) scale(1.025)}}
+      @keyframes floatDiagonal{from{transform:translate3d(-14px,-10px,0) scale(1.015)}to{transform:translate3d(14px,12px,0) scale(.985)}}
 
       @media(max-width:768px){
         .site-header{height:60px;padding:0 18px;display:flex;justify-content:space-between}
@@ -606,6 +615,39 @@ function GlobalStyles() {
         .next-image{height:55svh}
         .minimal-footer{padding:24px 18px}
         .whatsapp{right:16px;bottom:16px;width:44px;height:44px}
+      }
+
+      /* Contacto: conservar tamaño original + iluminación visible */
+      .contact a.neon-mail{
+        font-size:clamp(42px,7vw,118px)!important;
+        line-height:.95!important;
+        letter-spacing:-.055em!important;
+        display:inline-block!important;
+        width:auto!important;
+      }
+      .contact-socials a.neon-social{
+        font-size:14px!important;
+        line-height:1!important;
+        display:inline-block!important;
+        width:auto!important;
+      }
+      .contact a.neon-mail:hover,.contact a.neon-mail:focus-visible,.contact a.neon-mail:active{
+        color:#00f5ff!important;
+        text-shadow:0 0 4px #00f5ff,0 0 12px #665cff,0 0 24px rgba(255,43,214,.9),0 0 42px rgba(0,245,255,.55)!important;
+      }
+      .contact-socials a.neon-instagram:hover,.contact-socials a.neon-instagram:focus-visible,.contact-socials a.neon-instagram:active{
+        color:#ff2bd6!important;
+        text-shadow:0 0 4px #ff2bd6,0 0 12px #ff4f91,0 0 24px rgba(102,92,255,.95)!important;
+      }
+      .contact-socials a.neon-linkedin:hover,.contact-socials a.neon-linkedin:focus-visible,.contact-socials a.neon-linkedin:active{
+        color:#00f5ff!important;
+        text-shadow:0 0 4px #00f5ff,0 0 12px #665cff,0 0 24px rgba(0,255,145,.75)!important;
+      }
+      @media(max-width:768px){
+        .contact a.neon-mail{font-size:clamp(31px,10vw,52px)!important;letter-spacing:-.045em!important}
+        .contact-socials a.neon-social{font-size:14px!important}
+        .gallery-wide{border-radius:14px!important;overflow:hidden}
+        .gallery-wide img{border-radius:14px!important}
       }
     `}</style>
   );
