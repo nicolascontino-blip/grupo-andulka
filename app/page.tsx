@@ -366,19 +366,18 @@ export default function AndulkaSite() {
           </div>
         </section>
 
-        <section id="contacto" className="contact">
-          <p className="eyebrow">Contacto</p>
-          <h2>Hablemos de<br />tu próximo proyecto.</h2>
-          <a className="big-email" className="neon-mail" href="mailto:info@grupoandulka.com">
-            info@grupoandulka.com ↗
-          </a>
-          <div className="contact-bottom">
-            <div>
-              <a className="neon-social neon-instagram" href="https://instagram.com/grupoandulka/" target="_blank" rel="noreferrer">Instagram ↗</a>
-              <a className="neon-social neon-linkedin" href="https://linkedin.com/company/grupo-andulka/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-            </div>
-            <span>Buenos Aires, Argentina</span>
+        <section id="contacto" className="contact editorial-footer">
+          <div className="footer-actions">
+            <a href="mailto:info@grupoandulka.com" className="footer-action"><span>Hablemos</span><span className="footer-arrow">↗</span></a>
+            <a href="mailto:info@grupoandulka.com?subject=Portfolio%20%2F%20Grupo%20Andulka" className="footer-action"><span>Sumate al equipo</span><span className="footer-arrow">↗</span></a>
           </div>
+          <div className="footer-info">
+            <div className="footer-identity"><strong>Grupo Andulka</strong><span>Arquitectura · Interiorismo · Workplaces</span><span>Buenos Aires, Argentina</span></div>
+            <nav className="footer-nav"><a href="#proyectos">Proyectos</a><a href="#estudio">Estudio</a><a className="neon-mail" href="mailto:info@grupoandulka.com">info@grupoandulka.com</a></nav>
+            <div className="footer-socials"><a className="neon-social neon-instagram" href="https://instagram.com/grupoandulka/" target="_blank" rel="noreferrer">Instagram ↗</a><a className="neon-social neon-linkedin" href="https://linkedin.com/company/grupo-andulka/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
+          </div>
+          <div className="footer-wordmark">GRUPO ANDULKA</div>
+          <div className="footer-legal"><span>© {new Date().getFullYear()} Grupo Andulka. Todos los derechos reservados.</span><span>Designed by <strong>CONTI</strong></span></div>
         </section>
       </main>
 
@@ -767,6 +766,20 @@ function GlobalStyles() {
         border-radius:28px;
       }
       .project-hero,.project-video,.gallery-wide,.next-image{overflow:hidden}
+
+      /* Footer editorial */
+      .editorial-footer{background:var(--paper);color:var(--ink);min-height:auto;padding:20px 20px 14px;display:block;border-top:1px solid var(--line)}
+      .footer-actions{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(21,21,21,.72);border-radius:28px;overflow:hidden}
+      .footer-action{min-height:134px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;text-decoration:none;font-size:clamp(26px,2.35vw,40px);font-weight:300;letter-spacing:-.035em;transition:background .28s ease,padding .35s cubic-bezier(.16,1,.3,1)}
+      .footer-action:first-child{border-right:1px solid rgba(21,21,21,.55)} .footer-action:hover{background:rgba(21,21,21,.045);padding-left:60px}
+      .footer-arrow{font-size:.65em;opacity:0;transform:translate(-8px,8px);transition:.28s ease}.footer-action:hover .footer-arrow{opacity:1;transform:none}
+      .footer-info{min-height:185px;padding:52px 0 42px;display:grid;grid-template-columns:1.15fr .8fr 1fr;gap:60px;align-items:start;font-size:12px;line-height:1.55}
+      .footer-identity,.footer-nav,.footer-socials{display:flex;flex-direction:column;align-items:flex-start}.footer-identity strong{font-weight:500;margin-bottom:4px}.footer-identity span{opacity:.62}
+      .footer-nav a,.footer-socials a{text-decoration:none}.footer-nav a{opacity:.62;transition:opacity .2s}.footer-nav a:hover{opacity:1}.footer-socials{align-items:flex-end;gap:7px}
+      .footer-wordmark{width:100%;overflow:hidden;white-space:nowrap;font-size:clamp(72px,12.2vw,195px);line-height:.8;font-weight:500;letter-spacing:-.075em;padding:28px 0 38px}
+      .footer-legal{border-top:1px solid rgba(21,21,21,.25);padding-top:12px;display:flex;justify-content:space-between;gap:30px;font-size:10px;color:rgba(21,21,21,.48)}.footer-legal strong{font-weight:500;color:var(--ink);letter-spacing:.08em}
+      .editorial-footer a.neon-mail{font-size:12px!important;line-height:1.55!important;letter-spacing:0!important;width:auto!important}.editorial-footer .footer-socials a.neon-social{font-size:12px!important;line-height:1.55!important}
+      @media(max-width:768px){.editorial-footer{padding:14px 14px 12px}.footer-actions{grid-template-columns:1fr;border-radius:20px}.footer-action{min-height:92px;padding:0 22px;font-size:27px}.footer-action:first-child{border-right:0;border-bottom:1px solid rgba(21,21,21,.55)}.footer-action:hover{padding-left:22px}.footer-info{min-height:0;padding:38px 2px 32px;grid-template-columns:1fr 1fr;gap:34px 22px}.footer-identity{grid-column:1/-1}.footer-socials{align-items:flex-end}.footer-wordmark{font-size:16.8vw;line-height:.82;padding:22px 0 26px}.footer-legal{font-size:9px;line-height:1.4;align-items:flex-end}.footer-legal span:first-child{max-width:58%}.editorial-footer a.neon-mail,.editorial-footer .footer-socials a.neon-social{font-size:11px!important}}
     `}</style>
   );
 }
