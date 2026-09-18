@@ -405,18 +405,25 @@ function GlobalStyles() {
       button{color:inherit}
       img{display:block;width:100%}
       a{color:inherit}
-      /* Liquid Glass + LED 360 */
-      .led-glass{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.06));box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(255,255,255,.05),0 8px 28px rgba(0,0,0,.08);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);text-decoration:none;overflow:hidden;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,background .25s ease,border-color .25s ease}
-      .led-glass::before{content:"";position:absolute;width:180%;aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%) rotate(0deg);z-index:-2;background:conic-gradient(transparent 0deg,transparent 210deg,#00f5ff 235deg,#6c63ff 260deg,#ff28d7 285deg,#eaff00 310deg,#00ff91 335deg,#00f5ff 360deg);opacity:0;transition:opacity .25s ease}
-      .led-glass::after{content:"";position:absolute;inset:1.5px;z-index:-1;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.045));box-shadow:inset 0 1px 0 rgba(255,255,255,.18);pointer-events:none}
-      .led-glass:hover{transform:translateY(-2px) scale(1.015);border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.30),0 10px 35px rgba(0,0,0,.14)}
-      .led-glass:hover::before{opacity:1;animation:andulkaLedOrbit 1.35s linear infinite}
-      @keyframes andulkaLedOrbit{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
-      .led-glass:active{transform:translateY(0) scale(.96);transition-duration:.08s}
-      .led-glass-light{color:var(--ink);background:rgba(255,255,255,.34);border-color:rgba(21,21,21,.12);cursor:pointer}
-      .led-glass-light::after{background:rgba(243,240,235,.76)}
-      .led-glass-hero{padding:10px 18px;color:#fff;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.10)}
-      .led-glass-project{padding:7px 14px;min-height:32px;color:#fff;border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.10)}
+      /* Liquid Glass + LED continuo 360 */
+      .led-glass{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 28px rgba(0,0,0,.08);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);text-decoration:none;overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease}
+      .led-glass::before{content:"";position:absolute;z-index:-2;width:220%;aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%) rotate(0deg);background:conic-gradient(#00f5ff 0deg,#665cff 70deg,#ff2bd6 145deg,#ff4f91 205deg,#eaff00 270deg,#00ff91 320deg,#00f5ff 360deg);opacity:0;transition:opacity .18s ease}
+      .led-glass::after{content:"";position:absolute;z-index:-1;inset:2px;border-radius:inherit;background:rgba(20,20,20,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.22);pointer-events:none}
+      .led-glass:hover{transform:translateY(-1px);box-shadow:0 0 16px rgba(0,245,255,.12),0 10px 30px rgba(0,0,0,.12)}
+      .led-glass:hover::before{opacity:1;animation:andulkaLedOrbit 1.6s linear infinite}
+      .led-glass:active{transform:scale(.97)}
+      @keyframes andulkaLedOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
+      .led-glass-light{color:var(--ink);background:rgba(255,255,255,.35);border-color:rgba(21,21,21,.12);cursor:pointer}
+      .led-glass-light::after{background:rgba(243,240,235,.82)}
+      .led-glass-hero{padding:10px 18px;color:#fff}
+      .led-glass-project{min-height:32px;padding:7px 14px;color:#fff}
+
+      /* Borde LED continuo en portadas */
+      .project-cover::before{content:"";position:absolute;z-index:4;inset:0;border-radius:22px;padding:2px;background:conic-gradient(#00f5ff 0deg,#665cff 70deg,#ff2bd6 145deg,#ff4f91 205deg,#eaff00 270deg,#00ff91 320deg,#00f5ff 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;pointer-events:none;transition:opacity .2s ease}
+      .project-cover::after{content:"";position:absolute;z-index:3;inset:0;border-radius:22px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);opacity:0;pointer-events:none;transition:opacity .2s ease,box-shadow .2s ease}
+      .project-card:hover .project-cover::before{opacity:1;animation:photoLedFlow 1.8s linear infinite}
+      .project-card:hover .project-cover::after{opacity:1;box-shadow:inset 0 0 10px rgba(0,245,255,.14),0 0 16px rgba(255,43,214,.10)}
+      @keyframes photoLedFlow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
 
       .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase}
       .site-header{position:fixed;z-index:1000;top:0;left:0;right:0;height:74px;padding:0 30px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;color:#fff;transition:.35s ease}
@@ -582,6 +589,7 @@ function GlobalStyles() {
         .gallery-wide{margin-bottom:18px}
         .motion-1,.motion-2,.motion-3,.motion-4,.motion-5,.motion-6{animation-range:entry 15% exit 85%}
         .project-cover,.project-hero img,.project-video video,.gallery-wide img,.next-image,.next-image img{border-radius:14px}
+        .project-cover::before,.project-cover::after{border-radius:14px}
         .hero-disciplines{gap:5px;font-size:9px;letter-spacing:.08em}
         .gallery-wide.inset{width:100%;margin:70px 0}
         .gallery-pair{grid-template-columns:1fr;gap:18px;margin:70px 0}
