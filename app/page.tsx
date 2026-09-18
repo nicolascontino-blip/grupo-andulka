@@ -548,55 +548,76 @@ function GlobalStyles() {
       @keyframes motion4{from{transform:translate3d(-5vw,1vh,0) rotate(-.3deg)}to{transform:translate3d(2vw,-3vh,0) rotate(.2deg)}}
       @keyframes motion5{from{transform:translate3d(3vw,3vh,0) scale(.99)}to{transform:translate3d(-1vw,-2vh,0) scale(1.01)}}
       @keyframes motion6{from{transform:translate3d(-1vw,4vh,0)}to{transform:translate3d(3vw,-4vh,0)}}
-      /* Movimiento tipo Apple: depende del scroll, no del tiempo */
+      /* Ventanas de imágenes tipo Apple / EBRAS: movimiento ligado al scroll */
+      .project-gallery{
+        overflow:visible;
+      }
       .gallery-wide{
+        position:relative;
+        overflow:hidden;
+        border-radius:28px;
+        transform-origin:center center;
         animation-duration:1ms;
         animation-timing-function:linear;
         animation-fill-mode:both;
         animation-timeline:view();
         animation-range:entry 0% exit 100%;
       }
+      .gallery-wide img{
+        display:block;
+        width:100%;
+        height:auto;
+        border-radius:28px;
+        transform:scale(1.08);
+        animation:windowImageDrift 1ms linear both;
+        animation-timeline:view();
+        animation-range:entry 0% exit 100%;
+      }
+      .motion-1{animation-name:windowPath1}
+      .motion-2{animation-name:windowPath2}
+      .motion-3{animation-name:windowPath3}
+      .motion-4{animation-name:windowPath4}
+      .motion-5{animation-name:windowPath5}
+      .motion-6{animation-name:windowPath6}
 
-      /* Cada imagen entra desde un lugar, se centra y sale hacia otro */
-      .motion-1{animation-name:scrollPath1}
-      .motion-2{animation-name:scrollPath2}
-      .motion-3{animation-name:scrollPath3}
-      .motion-4{animation-name:scrollPath4}
-      .motion-5{animation-name:scrollPath5}
-      .motion-6{animation-name:scrollPath6}
-
-      @keyframes scrollPath1{
-        0%{transform:translate3d(-18vw,10vh,0) scale(.86);opacity:.30}
-        45%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
-        100%{transform:translate3d(16vw,-12vh,0) scale(.88);opacity:.22}
+      /* En el centro de pantalla cada ventana queda limpia; luego se escapa a otro lado */
+      @keyframes windowPath1{
+        0%{transform:translate3d(-22vw,14vh,0) scale(.78);opacity:.20}
+        42%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(24vw,-18vh,0) scale(.80);opacity:.18}
       }
-      @keyframes scrollPath2{
-        0%{transform:translate3d(17vw,16vh,0) scale(.84);opacity:.25}
-        44%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
-        100%{transform:translate3d(-20vw,-8vh,0) scale(.90);opacity:.25}
+      @keyframes windowPath2{
+        0%{transform:translate3d(25vw,18vh,0) scale(.76);opacity:.18}
+        42%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(-23vw,-12vh,0) scale(.82);opacity:.20}
       }
-      @keyframes scrollPath3{
-        0%{transform:translate3d(5vw,22vh,0) scale(.82);opacity:.22}
-        43%,59%{transform:translate3d(0,0,0) scale(1);opacity:1}
-        100%{transform:translate3d(-15vw,-18vh,0) scale(.91);opacity:.20}
+      @keyframes windowPath3{
+        0%{transform:translate3d(-12vw,25vh,0) scale(.74);opacity:.16}
+        42%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(20vw,-22vh,0) scale(.84);opacity:.18}
       }
-      @keyframes scrollPath4{
-        0%{transform:translate3d(-20vw,-4vh,0) scale(.88);opacity:.25}
-        44%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
-        100%{transform:translate3d(18vw,15vh,0) scale(.84);opacity:.22}
+      @keyframes windowPath4{
+        0%{transform:translate3d(24vw,-8vh,0) scale(.80);opacity:.18}
+        42%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(-26vw,18vh,0) scale(.76);opacity:.16}
       }
-      @keyframes scrollPath5{
-        0%{transform:translate3d(14vw,20vh,0) scale(.80);opacity:.20}
-        45%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
-        100%{transform:translate3d(-8vw,-22vh,0) scale(.90);opacity:.20}
+      @keyframes windowPath5{
+        0%{transform:translate3d(-25vw,20vh,0) scale(.75);opacity:.16}
+        42%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(12vw,-25vh,0) scale(.84);opacity:.18}
       }
-      @keyframes scrollPath6{
-        0%{transform:translate3d(-12vw,18vh,0) scale(.83);opacity:.22}
-        44%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
-        100%{transform:translate3d(21vw,-14vh,0) scale(.87);opacity:.20}
+      @keyframes windowPath6{
+        0%{transform:translate3d(18vw,24vh,0) scale(.76);opacity:.17}
+        42%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(-24vw,-20vh,0) scale(.80);opacity:.18}
+      }
+      @keyframes windowImageDrift{
+        0%{transform:translate3d(-3%,3%,0) scale(1.10)}
+        50%{transform:translate3d(0,0,0) scale(1.04)}
+        100%{transform:translate3d(3%,-3%,0) scale(1.10)}
       }
 
-      /* Texto que se revela al scrollear como en el video de referencia */
+      /* Textos: aparecen y se acomodan mientras se scrollea */
       .project-intro .eyebrow,
       .project-intro h1,
       .project-description,
@@ -615,23 +636,9 @@ function GlobalStyles() {
         animation-range:entry 8% cover 34%;
       }
       @keyframes andulkaTextReveal{
-        0%{
-          opacity:0;
-          transform:translate3d(0,34px,0);
-          filter:blur(10px);
-        }
-        58%{
-          opacity:.72;
-          filter:blur(3px);
-        }
-        100%{
-          opacity:1;
-          transform:translate3d(0,0,0);
-          filter:blur(0);
-        }
+        from{opacity:0;transform:translate3d(0,48px,0);filter:blur(9px)}
+        to{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
       }
-
-      /* Las tarjetas de portada también entran desde posiciones diferentes */
       .project-card{
         animation:cardScrollReveal linear both;
         animation-timeline:view();
@@ -645,6 +652,9 @@ function GlobalStyles() {
       }
 
       @media(max-width:768px){
+        .gallery-wide{border-radius:18px;animation-range:entry 0% exit 100%}
+        .gallery-wide img{border-radius:18px}
+
         .gallery-wide{
           animation-range:entry 0% exit 100%;
         }
@@ -711,7 +721,7 @@ function GlobalStyles() {
 
       /* Contacto: conservar tamaño original + iluminación visible */
       .contact a.neon-mail{
-        font-size:clamp(42px,7vw,118px)!important;
+        font-size:clamp(30px,4.4vw,72px)!important;
         line-height:.95!important;
         letter-spacing:-.055em!important;
         display:inline-block!important;
@@ -736,7 +746,7 @@ function GlobalStyles() {
         text-shadow:0 0 4px #00f5ff,0 0 12px #665cff,0 0 24px rgba(0,255,145,.75)!important;
       }
       @media(max-width:768px){
-        .contact a.neon-mail{font-size:clamp(31px,10vw,52px)!important;letter-spacing:-.045em!important}
+        .contact a.neon-mail{font-size:clamp(26px,8vw,40px)!important;letter-spacing:-.035em!important}
         .contact-socials a.neon-social{font-size:14px!important}
         .gallery-wide{border-radius:14px!important;overflow:hidden}
         .gallery-wide img{border-radius:14px!important}
@@ -750,6 +760,13 @@ function GlobalStyles() {
           filter:none!important;
         }
       }
+
+      /* Todos los elementos visuales se leen como ventanas redondeadas */
+      .project-cover,.project-hero,.project-hero img,.project-video,.project-video video,
+      .gallery-wide,.gallery-wide img,.next-image,.next-image img{
+        border-radius:28px;
+      }
+      .project-hero,.project-video,.gallery-wide,.next-image{overflow:hidden}
     `}</style>
   );
 }
