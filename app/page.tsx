@@ -375,7 +375,7 @@ export default function AndulkaSite() {
             <nav className="footer-nav"><a href="#proyectos">Proyectos</a><a href="#estudio">Estudio</a><a className="neon-mail" href="mailto:info@grupoandulka.com">info@grupoandulka.com</a></nav>
             <div className="footer-socials"><a className="neon-social neon-instagram" href="https://instagram.com/grupoandulka/" target="_blank" rel="noreferrer">Instagram ↗</a><a className="neon-social neon-linkedin" href="https://linkedin.com/company/grupo-andulka/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
           </div>
-          <div className="footer-wordmark" aria-label="GRUPO ANDULKA"><span>GRUPO ANDULKA</span></div>
+          <div className="footer-origami-brand"><img src="/andulka-footer-origami.png" alt="Grupo Andulka" /></div>
           <div className="footer-legal"><span>© {new Date().getFullYear()} Grupo Andulka. Todos los derechos reservados.</span><span>Designed by <strong>CONTI</strong></span></div>
         </section>
       </main>
@@ -787,6 +787,11 @@ function GlobalStyles() {
       .footer-wordmark span{display:inline-block;white-space:nowrap;font-weight:700;letter-spacing:-.085em;color:#7d1830;transform:perspective(900px) rotateX(8deg);text-shadow:0 2px 0 #9c3450,0 5px 0 #6f1028,0 10px 14px rgba(74,8,28,.34),0 24px 34px rgba(38,5,16,.24),inset 0 2px 2px rgba(255,255,255,.7);filter:drop-shadow(0 18px 20px rgba(65,9,27,.20));-webkit-text-stroke:1px rgba(90,10,32,.22)}
       @supports ((-webkit-background-clip:text) or (background-clip:text)){.footer-wordmark span{background:linear-gradient(180deg,#f3a5b7 0%,#c34a69 18%,#8f1e3b 48%,#641128 72%,#a93252 100%);-webkit-background-clip:text;background-clip:text;color:transparent}}
       @media(max-width:768px){.footer-actions-single .footer-action:first-child{border-bottom:0}.footer-actions-single .footer-action{font-size:clamp(23px,7vw,30px)}.footer-wordmark{padding:28px 0 34px}.footer-wordmark span{transform:perspective(700px) rotateX(7deg);text-shadow:0 1px 0 #9c3450,0 3px 0 #6f1028,0 7px 11px rgba(74,8,28,.30),0 16px 24px rgba(38,5,16,.20)}}
+
+      /* Marca final origami */
+      .footer-origami-brand{width:100%;margin:12px 0 24px;overflow:hidden;border-radius:24px}
+      .footer-origami-brand img{display:block;width:100%;height:auto;object-fit:cover;object-position:center 62%;clip-path:inset(42% 0 7% 0 round 18px);margin-top:-42%;margin-bottom:-7%}
+      @media(max-width:768px){.footer-origami-brand{border-radius:16px;margin:6px 0 18px}.footer-origami-brand img{clip-path:inset(42% 0 7% 0 round 12px);margin-top:-42%;margin-bottom:-7%}}
     `}</style>
   );
 }
