@@ -374,8 +374,8 @@ export default function AndulkaSite() {
           </a>
           <div className="contact-bottom">
             <div>
-              <a href="https://instagram.com/grupoandulka/" target="_blank" rel="noreferrer">Instagram ↗</a>
-              <a href="https://linkedin.com/company/grupo-andulka/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+              <a className="neon-social neon-instagram" href="https://instagram.com/grupoandulka/" target="_blank" rel="noreferrer">Instagram ↗</a>
+              <a className="neon-social neon-linkedin" href="https://linkedin.com/company/grupo-andulka/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
             </div>
             <span>Buenos Aires, Argentina</span>
           </div>
@@ -408,18 +408,72 @@ function GlobalStyles() {
       button{color:inherit}
       img{display:block;width:100%}
       a{color:inherit}
-      /* Liquid Glass + LED continuo 360 */
-      .led-glass{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 28px rgba(0,0,0,.08);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);text-decoration:none;overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease}
-      .led-glass::before{content:"";position:absolute;z-index:-2;width:220%;aspect-ratio:1;left:50%;top:50%;transform:translate(-50%,-50%) rotate(0deg);background:conic-gradient(#00f5ff 0deg,#665cff 70deg,#ff2bd6 145deg,#ff4f91 205deg,#eaff00 270deg,#00ff91 320deg,#00f5ff 360deg);opacity:0;transition:opacity .18s ease}
-      .led-glass::after{content:"";position:absolute;z-index:-1;inset:2px;border-radius:inherit;background:rgba(20,20,20,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.22);pointer-events:none}
-      .led-glass:hover{transform:translateY(-1px);box-shadow:0 0 16px rgba(0,245,255,.12),0 10px 30px rgba(0,0,0,.12)}
-      .led-glass:hover::before{opacity:1;animation:andulkaLedOrbit 1.6s linear infinite}
+      /* Liquid Glass + LED continuo SOLO EN EL BORDE */
+      .led-glass{
+        position:relative;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        min-height:36px;
+        padding:8px 16px;
+        border-radius:999px;
+        border:1px solid rgba(255,255,255,.24);
+        background:rgba(255,255,255,.10);
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 28px rgba(0,0,0,.08);
+        backdrop-filter:blur(18px) saturate(150%);
+        -webkit-backdrop-filter:blur(18px) saturate(150%);
+        text-decoration:none;
+        overflow:visible;
+        transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease;
+      }
+      .led-glass::before{
+        content:"";
+        position:absolute;
+        inset:-1px;
+        border-radius:inherit;
+        padding:1.5px;
+        background:conic-gradient(
+          from var(--led-angle,0deg),
+          #00f5ff 0deg,
+          #665cff 70deg,
+          #ff2bd6 145deg,
+          #ff4f91 205deg,
+          #eaff00 270deg,
+          #00ff91 320deg,
+          #00f5ff 360deg
+        );
+        -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+        -webkit-mask-composite:xor;
+        mask-composite:exclude;
+        opacity:0;
+        pointer-events:none;
+        z-index:2;
+        transition:opacity .18s ease;
+      }
+      .led-glass::after{display:none}
+      .led-glass:hover{
+        transform:translateY(-1px);
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 28px rgba(0,0,0,.08);
+      }
+      .led-glass:hover::before{
+        opacity:1;
+        animation:andulkaBorderColors 1.8s linear infinite;
+      }
       .led-glass:active{transform:scale(.97)}
-      @keyframes andulkaLedOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
-      .led-glass-light{color:var(--ink);background:rgba(255,255,255,.35);border-color:rgba(21,21,21,.12);cursor:pointer}
-      .led-glass-light::after{background:rgba(243,240,235,.82)}
-      .led-glass-hero{padding:10px 18px;color:#fff}
-      .led-glass-project{min-height:32px;padding:7px 14px;color:#fff}
+      @property --led-angle{
+        syntax:"<angle>";
+        initial-value:0deg;
+        inherits:false;
+      }
+      @keyframes andulkaBorderColors{to{--led-angle:360deg}}
+      .led-glass-light{
+        color:var(--ink);
+        background:rgba(243,240,235,.76);
+        border-color:rgba(21,21,21,.12);
+        cursor:pointer;
+      }
+      .led-glass-hero{padding:10px 18px;color:#fff;background:rgba(20,20,20,.18)}
+      .led-glass-project{min-height:32px;padding:7px 14px;color:#fff;background:rgba(20,20,20,.20)}
       .led-glass-project{gap:9px}
       .project-bird{width:18px!important;height:18px!important;object-fit:contain!important;flex:0 0 18px;filter:none}
 
