@@ -337,7 +337,10 @@ export default function AndulkaSite() {
                   </div>
                   <div className="project-meta">
                     {p.año && <span>{p.año}</span>}
-                    <span className="led-glass led-glass-project">Ver proyecto ↗</span>
+                    <span className="led-glass led-glass-project">
+                      <span>Ver proyecto</span>
+                      <img className="project-bird" src="/PAJARITO1.png" alt="" />
+                    </span>
                   </div>
                 </div>
               </div>
@@ -417,6 +420,8 @@ function GlobalStyles() {
       .led-glass-light::after{background:rgba(243,240,235,.82)}
       .led-glass-hero{padding:10px 18px;color:#fff}
       .led-glass-project{min-height:32px;padding:7px 14px;color:#fff}
+      .led-glass-project{gap:9px}
+      .project-bird{width:18px!important;height:18px!important;object-fit:contain!important;flex:0 0 18px;filter:none}
 
       /* Borde LED continuo en portadas */
       .project-cover::before{content:"";position:absolute;z-index:4;inset:0;border-radius:22px;padding:2px;background:conic-gradient(#00f5ff 0deg,#665cff 70deg,#ff2bd6 145deg,#ff4f91 205deg,#eaff00 270deg,#00ff91 320deg,#00f5ff 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;pointer-events:none;transition:opacity .2s ease}
@@ -459,14 +464,14 @@ function GlobalStyles() {
       .project-cover{transform:translateZ(0)}
       .project-hero img,.gallery-wide img,.next-image img{overflow:hidden}
 
-      .project-card-1 .project-cover{height:88vh;min-height:600px}
+      .project-card-1 .project-cover{height:auto;min-height:0}
       .project-card-2{width:82%;margin-left:auto;margin-top:130px}
-      .project-card-2 .project-cover{height:82vh;min-height:580px}
+      .project-card-2 .project-cover{height:auto;min-height:0}
       .project-card-3{width:66%;margin-top:130px}
-      .project-card-3 .project-cover{height:70vh;min-height:520px}
+      .project-card-3 .project-cover{height:auto;min-height:0}
       .project-card-4{width:82%;margin-left:auto;margin-top:130px}
-      .project-card-4 .project-cover{height:78vh;min-height:560px}
-      .project-cover>img{height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
+      .project-card-4 .project-cover{height:auto;min-height:0}
+      .project-cover>img{height:auto;aspect-ratio:auto;object-fit:contain;transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
       .project-card:hover .project-cover>img{transform:scale(1.025)}
       .project-cover-shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.48));transition:background .3s}
       .project-overlay{position:absolute;left:0;right:0;bottom:0;padding:30px;color:white;display:flex;justify-content:space-between;align-items:flex-end}
@@ -502,8 +507,8 @@ function GlobalStyles() {
       .project-description-wrap{max-width:420px}
       .project-description{font-size:15px;line-height:1.65;font-weight:300}
       .project-facts{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-      .project-hero{height:92vh;min-height:620px;padding:0 30px;scroll-snap-align:center}
-      .project-hero img{height:100%;object-fit:cover}
+      .project-hero{height:auto;min-height:0;padding:0 30px;scroll-snap-align:center}
+      .project-hero img{height:auto;max-height:none;object-fit:contain}
       .project-video{padding:30px 30px 0;scroll-snap-align:center}
       .project-video video{display:block;width:100%;max-height:92vh;object-fit:cover;background:#111}
       .project-gallery{padding:30px;scroll-snap-type:y proximity}
@@ -524,7 +529,7 @@ function GlobalStyles() {
         animation-timeline:view();
         animation-range:entry 0% exit 100%;
       }
-      .gallery-wide img{width:100%;max-height:92vh;object-fit:cover}
+      .gallery-wide img{width:100%;height:auto;max-height:none;object-fit:contain}
       .gallery-wide.inset{width:74%;margin:140px auto}
       .gallery-pair{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:140px 0}
       .gallery-pair figure{height:72vh}
@@ -566,6 +571,7 @@ function GlobalStyles() {
         .projects-heading h2{font-size:11vw;margin-top:25px}
         .project-card,.project-card-2,.project-card-3,.project-card-4{width:100%;margin:0 0 18px}
         .project-card-1 .project-cover,.project-card-2 .project-cover,.project-card-3 .project-cover,.project-card-4 .project-cover{height:72svh;min-height:520px}
+        .project-cover>img{height:100%;object-fit:cover}
         .project-overlay{padding:18px;display:block}
         .project-overlay h3{font-size:10vw}
         .project-meta{justify-content:space-between;margin-top:16px}
