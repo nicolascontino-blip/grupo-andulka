@@ -789,9 +789,29 @@ function GlobalStyles() {
       @media(max-width:768px){.footer-actions-single .footer-action:first-child{border-bottom:0}.footer-actions-single .footer-action{font-size:clamp(23px,7vw,30px)}.footer-wordmark{padding:28px 0 34px}.footer-wordmark span{transform:perspective(700px) rotateX(7deg);text-shadow:0 1px 0 #9c3450,0 3px 0 #6f1028,0 7px 11px rgba(74,8,28,.30),0 16px 24px rgba(38,5,16,.20)}}
 
       /* Marca final origami */
-      .footer-origami-brand{width:100%;margin:12px 0 24px;overflow:hidden;border-radius:24px}
-      .footer-origami-brand img{display:block;width:100%;height:auto;object-fit:cover;object-position:center 62%;clip-path:inset(42% 0 7% 0 round 18px);margin-top:-42%;margin-bottom:-7%}
-      @media(max-width:768px){.footer-origami-brand{border-radius:16px;margin:6px 0 18px}.footer-origami-brand img{clip-path:inset(42% 0 7% 0 round 12px);margin-top:-42%;margin-bottom:-7%}}
+      .footer-origami-brand{
+        width:100%;
+        margin:18px 0 28px;
+        padding:10px 0;
+        overflow:visible;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+      }
+      .footer-origami-brand img{
+        display:block;
+        width:min(100%,1500px);
+        height:auto;
+        object-fit:contain;
+        object-position:center;
+        clip-path:none;
+        margin:0;
+        border-radius:0;
+      }
+      @media(max-width:768px){
+        .footer-origami-brand{margin:10px 0 20px;padding:4px 0;overflow:visible}
+        .footer-origami-brand img{width:100%;height:auto;object-fit:contain;clip-path:none;margin:0;border-radius:0}
+      }
     `}</style>
   );
 }
