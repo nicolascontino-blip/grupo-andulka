@@ -548,21 +548,113 @@ function GlobalStyles() {
       @keyframes motion4{from{transform:translate3d(-5vw,1vh,0) rotate(-.3deg)}to{transform:translate3d(2vw,-3vh,0) rotate(.2deg)}}
       @keyframes motion5{from{transform:translate3d(3vw,3vh,0) scale(.99)}to{transform:translate3d(-1vw,-2vh,0) scale(1.01)}}
       @keyframes motion6{from{transform:translate3d(-1vw,4vh,0)}to{transform:translate3d(3vw,-4vh,0)}}
-      /* Movimiento editorial variado: cada foto transforma distinto */
-      .motion-1{animation:floatUp 8.5s ease-in-out infinite alternate}
-      .motion-2{animation:floatRight 10s ease-in-out infinite alternate}
-      .motion-3{animation:floatDown 9s ease-in-out infinite alternate}
-      .motion-4{animation:floatLeft 10.5s ease-in-out infinite alternate}
-      .motion-5{animation:floatZoomUp 11s ease-in-out infinite alternate}
-      .motion-6{animation:floatDiagonal 9.5s ease-in-out infinite alternate}
-      @keyframes floatUp{from{transform:translate3d(0,18px,0) scale(.985)}to{transform:translate3d(0,-18px,0) scale(1.015)}}
-      @keyframes floatRight{from{transform:translate3d(-16px,0,0) scale(1)}to{transform:translate3d(16px,-8px,0) scale(1.012)}}
-      @keyframes floatDown{from{transform:translate3d(0,-18px,0) scale(1.012)}to{transform:translate3d(0,18px,0) scale(.99)}}
-      @keyframes floatLeft{from{transform:translate3d(18px,8px,0) scale(.99)}to{transform:translate3d(-18px,-6px,0) scale(1.012)}}
-      @keyframes floatZoomUp{from{transform:translate3d(0,14px,0) scale(.975)}to{transform:translate3d(8px,-16px,0) scale(1.025)}}
-      @keyframes floatDiagonal{from{transform:translate3d(-14px,-10px,0) scale(1.015)}to{transform:translate3d(14px,12px,0) scale(.985)}}
+      /* Movimiento tipo Apple: depende del scroll, no del tiempo */
+      .gallery-wide{
+        animation-duration:1ms;
+        animation-timing-function:linear;
+        animation-fill-mode:both;
+        animation-timeline:view();
+        animation-range:entry 0% exit 100%;
+      }
+
+      /* Cada imagen entra desde un lugar, se centra y sale hacia otro */
+      .motion-1{animation-name:scrollPath1}
+      .motion-2{animation-name:scrollPath2}
+      .motion-3{animation-name:scrollPath3}
+      .motion-4{animation-name:scrollPath4}
+      .motion-5{animation-name:scrollPath5}
+      .motion-6{animation-name:scrollPath6}
+
+      @keyframes scrollPath1{
+        0%{transform:translate3d(-18vw,10vh,0) scale(.86);opacity:.30}
+        45%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(16vw,-12vh,0) scale(.88);opacity:.22}
+      }
+      @keyframes scrollPath2{
+        0%{transform:translate3d(17vw,16vh,0) scale(.84);opacity:.25}
+        44%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(-20vw,-8vh,0) scale(.90);opacity:.25}
+      }
+      @keyframes scrollPath3{
+        0%{transform:translate3d(5vw,22vh,0) scale(.82);opacity:.22}
+        43%,59%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(-15vw,-18vh,0) scale(.91);opacity:.20}
+      }
+      @keyframes scrollPath4{
+        0%{transform:translate3d(-20vw,-4vh,0) scale(.88);opacity:.25}
+        44%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(18vw,15vh,0) scale(.84);opacity:.22}
+      }
+      @keyframes scrollPath5{
+        0%{transform:translate3d(14vw,20vh,0) scale(.80);opacity:.20}
+        45%,60%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(-8vw,-22vh,0) scale(.90);opacity:.20}
+      }
+      @keyframes scrollPath6{
+        0%{transform:translate3d(-12vw,18vh,0) scale(.83);opacity:.22}
+        44%,58%{transform:translate3d(0,0,0) scale(1);opacity:1}
+        100%{transform:translate3d(21vw,-14vh,0) scale(.87);opacity:.20}
+      }
+
+      /* Texto que se revela al scrollear como en el video de referencia */
+      .project-intro .eyebrow,
+      .project-intro h1,
+      .project-description,
+      .project-specs,
+      .section-label,
+      .projects-heading,
+      .studio h2,
+      .studio-copy,
+      .contact-label,
+      .contact h2,
+      .contact-socials,
+      .next-label,
+      .next-project h2{
+        animation:andulkaTextReveal linear both;
+        animation-timeline:view();
+        animation-range:entry 8% cover 34%;
+      }
+      @keyframes andulkaTextReveal{
+        0%{
+          opacity:0;
+          transform:translate3d(0,34px,0);
+          filter:blur(10px);
+        }
+        58%{
+          opacity:.72;
+          filter:blur(3px);
+        }
+        100%{
+          opacity:1;
+          transform:translate3d(0,0,0);
+          filter:blur(0);
+        }
+      }
+
+      /* Las tarjetas de portada también entran desde posiciones diferentes */
+      .project-card{
+        animation:cardScrollReveal linear both;
+        animation-timeline:view();
+        animation-range:entry 0% cover 38%;
+      }
+      .project-card:nth-child(odd){--card-x:-9vw}
+      .project-card:nth-child(even){--card-x:9vw}
+      @keyframes cardScrollReveal{
+        from{opacity:.18;transform:translate3d(var(--card-x),70px,0) scale(.94);filter:blur(7px)}
+        to{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+      }
 
       @media(max-width:768px){
+        .gallery-wide{
+          animation-range:entry 0% exit 100%;
+        }
+        @keyframes scrollPath1{0%{transform:translate3d(-10vw,7vh,0) scale(.92);opacity:.4}45%,60%{transform:none;opacity:1}100%{transform:translate3d(9vw,-7vh,0) scale(.94);opacity:.35}}
+        @keyframes scrollPath2{0%{transform:translate3d(10vw,8vh,0) scale(.91);opacity:.4}45%,60%{transform:none;opacity:1}100%{transform:translate3d(-9vw,-6vh,0) scale(.94);opacity:.35}}
+        @keyframes scrollPath3{0%{transform:translate3d(-7vw,9vh,0) scale(.92);opacity:.4}45%,60%{transform:none;opacity:1}100%{transform:translate3d(10vw,-8vh,0) scale(.94);opacity:.35}}
+        @keyframes scrollPath4{0%{transform:translate3d(9vw,7vh,0) scale(.92);opacity:.4}45%,60%{transform:none;opacity:1}100%{transform:translate3d(-10vw,-7vh,0) scale(.94);opacity:.35}}
+        @keyframes scrollPath5{0%{transform:translate3d(-8vw,8vh,0) scale(.91);opacity:.4}45%,60%{transform:none;opacity:1}100%{transform:translate3d(8vw,-8vh,0) scale(.94);opacity:.35}}
+        @keyframes scrollPath6{0%{transform:translate3d(10vw,8vh,0) scale(.92);opacity:.4}45%,60%{transform:none;opacity:1}100%{transform:translate3d(-8vw,-7vh,0) scale(.94);opacity:.35}}
+
         .site-header{height:60px;padding:0 18px;display:flex;justify-content:space-between}
         .desktop-nav,.desktop-contact{display:none}
         .menu-button{display:block;color:inherit}
@@ -648,6 +740,15 @@ function GlobalStyles() {
         .contact-socials a.neon-social{font-size:14px!important}
         .gallery-wide{border-radius:14px!important;overflow:hidden}
         .gallery-wide img{border-radius:14px!important}
+      }
+
+      @media(prefers-reduced-motion:reduce){
+        .gallery-wide,.project-card,.project-intro .eyebrow,.project-intro h1,.project-description,.project-specs,.section-label,.projects-heading,.studio h2,.studio-copy,.contact-label,.contact h2,.contact-socials,.next-label,.next-project h2{
+          animation:none!important;
+          opacity:1!important;
+          transform:none!important;
+          filter:none!important;
+        }
       }
     `}</style>
   );
