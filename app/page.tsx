@@ -369,7 +369,7 @@ export default function AndulkaSite() {
         <section id="contacto" className="contact">
           <p className="eyebrow">Contacto</p>
           <h2>Hablemos de<br />tu próximo proyecto.</h2>
-          <a className="big-email" href="mailto:info@grupoandulka.com">
+          <a className="big-email" className="neon-mail" href="mailto:info@grupoandulka.com">
             info@grupoandulka.com ↗
           </a>
           <div className="contact-bottom">
@@ -408,73 +408,18 @@ function GlobalStyles() {
       button{color:inherit}
       img{display:block;width:100%}
       a{color:inherit}
-      /* Liquid Glass + LED continuo SOLO EN EL BORDE */
-      .led-glass{
-        position:relative;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        min-height:36px;
-        padding:8px 16px;
-        border-radius:999px;
-        border:1px solid rgba(255,255,255,.24);
-        background:rgba(255,255,255,.10);
-        box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 28px rgba(0,0,0,.08);
-        backdrop-filter:blur(18px) saturate(150%);
-        -webkit-backdrop-filter:blur(18px) saturate(150%);
-        text-decoration:none;
-        overflow:visible;
-        transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease;
-      }
-      .led-glass::before{
-        content:"";
-        position:absolute;
-        inset:-1px;
-        border-radius:inherit;
-        padding:1.5px;
-        background:conic-gradient(
-          from var(--led-angle,0deg),
-          #00f5ff 0deg,
-          #665cff 70deg,
-          #ff2bd6 145deg,
-          #ff4f91 205deg,
-          #eaff00 270deg,
-          #00ff91 320deg,
-          #00f5ff 360deg
-        );
-        -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-        -webkit-mask-composite:xor;
-        mask-composite:exclude;
-        opacity:0;
-        pointer-events:none;
-        z-index:2;
-        transition:opacity .18s ease;
-      }
-      .led-glass::after{display:none}
-      .led-glass:hover{
-        transform:translateY(-1px);
-        box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 28px rgba(0,0,0,.08);
-      }
-      .led-glass:hover::before{
-        opacity:1;
-        animation:andulkaBorderColors 1.8s linear infinite;
-      }
+      /* Liquid Glass + LED giratorio SOLO EN EL BORDE */
+      .led-glass{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 28px rgba(0,0,0,.08);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);text-decoration:none;overflow:hidden;transition:transform .22s cubic-bezier(.16,1,.3,1)}
+      .led-glass::before{content:"";position:absolute;z-index:-2;left:50%;top:50%;width:240%;aspect-ratio:1;transform:translate(-50%,-50%) rotate(0deg);background:conic-gradient(#00f5ff,#665cff,#ff2bd6,#ff4f91,#eaff00,#00ff91,#00f5ff);opacity:0;pointer-events:none}
+      .led-glass::after{content:"";position:absolute;z-index:-1;inset:2px;border-radius:999px;background:rgba(20,20,20,.36);box-shadow:inset 0 1px 0 rgba(255,255,255,.18);pointer-events:none}
+      .led-glass:hover{transform:translateY(-1px)}
+      .led-glass:hover::before,.led-glass:focus-visible::before,.led-glass:active::before{opacity:1;animation:andulkaLedSpin 1.35s linear infinite}
       .led-glass:active{transform:scale(.97)}
-      @property --led-angle{
-        syntax:"<angle>";
-        initial-value:0deg;
-        inherits:false;
-      }
-      @keyframes andulkaBorderColors{to{--led-angle:360deg}}
-      .led-glass-light{
-        color:var(--ink);
-        background:rgba(243,240,235,.76);
-        border-color:rgba(21,21,21,.12);
-        cursor:pointer;
-      }
-      .led-glass-hero{padding:10px 18px;color:#fff;background:rgba(20,20,20,.18)}
-      .led-glass-project{min-height:32px;padding:7px 14px;color:#fff;background:rgba(20,20,20,.20)}
-      .led-glass-project{gap:9px}
+      @keyframes andulkaLedSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+      .led-glass-light{color:var(--ink);background:rgba(243,240,235,.30);border-color:rgba(21,21,21,.12);cursor:pointer}
+      .led-glass-light::after{background:rgba(243,240,235,.92)}
+      .led-glass-hero{padding:10px 18px;color:#fff}
+      .led-glass-project{min-height:32px;padding:7px 14px;color:#fff;gap:9px}
       .project-bird{width:18px!important;height:18px!important;object-fit:contain!important;flex:0 0 18px;filter:none}
 
       /* Borde LED continuo en portadas */
@@ -565,8 +510,8 @@ function GlobalStyles() {
       .project-hero img{height:auto;max-height:none;object-fit:contain}
       .project-video{padding:30px 30px 0;scroll-snap-align:center}
       .project-video video{display:block;width:100%;max-height:92vh;object-fit:cover;background:#111}
-      .project-gallery{padding:30px;scroll-snap-type:y proximity}
-      .gallery-wide{margin:0 0 30px;will-change:transform;scroll-snap-align:center;scroll-snap-stop:normal}
+      .project-gallery{padding:30px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px;align-items:start;scroll-snap-type:y proximity}
+      .gallery-wide{width:100%;margin:0;will-change:transform;scroll-snap-align:center;scroll-snap-stop:normal}
       @keyframes motion1{from{transform:translate3d(5vw,2vh,0) rotate(.35deg)}to{transform:translate3d(-4vw,-2vh,0) rotate(-.25deg)}}
       @keyframes motion2{from{transform:translate3d(-3vw,4vh,0) scale(.985)}to{transform:translate3d(4vw,-1vh,0) scale(1)}}
       @keyframes motion3{from{transform:translate3d(1vw,5vh,0)}to{transform:translate3d(-2vw,-4vh,0)}}
@@ -583,8 +528,8 @@ function GlobalStyles() {
         animation-timeline:view();
         animation-range:entry 0% exit 100%;
       }
-      .gallery-wide img{width:100%;height:auto;max-height:none;object-fit:contain}
-      .gallery-wide.inset{width:74%;margin:140px auto}
+      .gallery-wide img{width:100%;height:auto;max-height:88vh;object-fit:contain}
+      .gallery-wide.inset{width:100%;margin:0}
       .gallery-pair{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:140px 0}
       .gallery-pair figure{height:72vh}
       .gallery-pair img{height:100%;object-fit:cover}
@@ -645,8 +590,9 @@ function GlobalStyles() {
         .project-hero{height:72svh;min-height:500px;padding:0 18px}
         .project-video{padding:18px 18px 0}
         .project-video video{max-height:72svh}
-        .project-gallery{padding:18px}
-        .gallery-wide{margin-bottom:18px}
+        .project-gallery{padding:18px;display:flex;flex-direction:column;gap:0}
+        .gallery-wide{width:100%;margin-bottom:18px}
+        .gallery-wide img{max-height:none}
         .motion-1,.motion-2,.motion-3,.motion-4,.motion-5,.motion-6{animation-range:entry 15% exit 85%}
         .project-cover,.project-hero img,.project-video video,.gallery-wide img,.next-image,.next-image img{border-radius:14px}
         .project-cover::before,.project-cover::after{border-radius:14px}
